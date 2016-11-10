@@ -1,0 +1,24 @@
+{
+	// JSHint Default Configuration File (as on JSHint website)
+	// See http://jshint.com/docs/ for more details
+
+	// Enforcing
+	"esnext"              : true,
+	"camelcase"           : true,
+	"eqeqeq"              : true,
+	"undef"               : true,
+	"unset"               : true,
+	"validateIndentation" : 2,
+	"curly"         			: true,
+	"quotmark"      			: "single",
+
+	// Relaxing
+	"esversion"           : 6,
+
+	// Environments
+	"jasmine"       	 		: true,
+	"node"                : true,
+	
+	// Custom Globals
+	"globals"       			: {} 
+}
