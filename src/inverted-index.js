@@ -64,4 +64,15 @@ class InvertedIndex {
 		}
 		return this.indexes
 	}
+
+	/**
+	 * @function takes an uploaded file as argument and read the contents of the file 
+   * @returns {Object} 
+   */
+	getIndex(name) {
+		if(Object.keys(this.indexes).length < 1 ) {
+			return {};
+		}
+		return this.indexes[name];
+	}
 }
