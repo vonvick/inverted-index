@@ -13,6 +13,7 @@ class InvertedIndex {
 		this.indexes = [];
 	}
 
+
 	/**
 	 * coverts the string provided to lower case, strips the string of all special 
 	 * characters, extra spaces and converts the result into an Array
@@ -25,35 +26,42 @@ class InvertedIndex {
 		return result;
 	}
 
+
+	/**
+	 * loops through an array and removes duplicate elements and returns an indexed 
+	 * @static
+	 * @param {}
+	 * @returns {Array} 
+	 */
+	sortIndex(arrayItem, element) {
+		element = parseInt(element);
+		for(let item in arrayItem) {
+			if(!this.indexes.hasOwnProperty([arrayItem[item]])) {
+				this.indexes[arrayItem[item]] = [];
+				this.indexes[arrayItem[item]].push(element); 
+			} else if(this.indexes.hasOwnProperty([arrayItem[item]]) && this.indexes[arrayItem[item]].indexOf(element) === -1) {
+				this.indexes[arrayItem[item]].push(element);
+			}
+		}
+	}
+
+
 	/**
 	 * @function takes a file path as argument and read the contents of the file 
 	 * @param {string} content the content of the file
 	 * @returns {Array} 
 	 */
-	createIndex(filepath) {
+	createIndex(fileContent) {
 		const indexArray = [];
 		fileContent.forEach((item) => {
 			let text = item.title + " " + item.content;
 			let textArray = InvertedIndex.textToArray(text);
 			indexArray.push(textArray);
 		});
-		
-		if(!this.indexes[name]) {
-			this.indexes[name] = {};
-			for(let element in indexArray) {
-				for(let item in indexArray[element]) {
-					// this.indexes[name][indexArray[element][item]] = [];
-					if(this.indexes[name][indexArray[element][item]] === undefined) {
-						this.indexes[name][indexArray[element][item]] = element; 
-					} else if(this.indexes[name].hasOwnProperty([indexArray[element][item]]) && 
-					this.indexes[name][indexArray[element][item]].search(element) === -1) {
-						this.indexes[name][indexArray[element][item]] += element;
-					} 
-				}
-			}
+		for(let element in indexArray) {
+			let textIndex = indexArray[element];
+			this.sortIndex(textIndex, element);
 		}
+		return this.indexes
 	}
 }
-
-var index = new InvertedIndex();
-index.createIndex()
