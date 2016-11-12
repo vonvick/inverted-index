@@ -28,41 +28,47 @@ class InvertedIndex {
 
 
 	/**
-	 * loops through an array and removes duplicate elements and returns an indexed 
+	 * loops through an array and removes duplicate elements
 	 * @static
 	 * @param {}
 	 * @returns {Array} 
 	 */
-	_sortIndex(arrayItem, element) {
+	_sortIndex(bookName, arrayItem, element) {
 		element = parseInt(element);
 		for(let item in arrayItem) {
-			if(!this.indexes.hasOwnProperty([arrayItem[item]])) {
-				this.indexes[arrayItem[item]] = [];
-				this.indexes[arrayItem[item]].push(element); 
-			} else if(this.indexes.hasOwnProperty([arrayItem[item]]) && this.indexes[arrayItem[item]].indexOf(element) === -1) {
-				this.indexes[arrayItem[item]].push(element);
+			if(!this.indexes[bookName].hasOwnProperty([arrayItem[item]])) {
+				this.indexes[bookName][arrayItem[item]] = [];
+				this.indexes[bookName][arrayItem[item]].push(element); 
+			} else if(this.indexes[bookName].hasOwnProperty([arrayItem[item]]) 
+					&& this.indexes[bookName][arrayItem[item]].indexOf(element) === -1) {
+				this.indexes[bookName][arrayItem[item]].push(element);
 			}
 		}
 	}
 
-
 	/**
 	 * @function takes a file path as argument and read the contents of the file 
-	 * @param {string} content the content of the file
+	 * @param {string} name the name of the file
+	 * @param {Array} content the content of the file
 	 * @returns {Array} 
 	 */
-	createIndex(fileContent) {
+	createIndex(name, fileContent) {
 		const indexArray = [];
 		fileContent.forEach((item) => {
 			let text = item.title + " " + item.content;
 			let textArray = InvertedIndex.textToArray(text);
 			indexArray.push(textArray);
 		});
-		for(let element in indexArray) {
-			let textIndex = indexArray[element];
-			this._sortIndex(textIndex, element);
+		
+		if(!this.indexes[name]) {
+			this.indexes[name] = {};
+			for(let element in indexArray) {
+				let textIndex = indexArray[element];
+				this._sortIndex(name, textIndex, element);
+			}
 		}
-		return this.indexes
+		
+		// return this.indexes;
 	}
 
 
@@ -70,11 +76,16 @@ class InvertedIndex {
 	 * @function takes an uploaded file as argument and read the contents of the file 
    * @returns {Object} 
    */
-	getIndex(name) {
+	getIndex(name = null) {
 		if(Object.keys(this.indexes).length < 1 ) {
 			return {};
+		} else if(name === null) {
+			return this.indexes;
+		} else {
+			if(this.indexes[name]) {
+				return this.indexes[name];
+			}
 		}
-		return this.indexes[name];
 	}
 
 
@@ -85,17 +96,30 @@ class InvertedIndex {
 	 * @returns {Object}
 	 */
 
-	_getTermResult(answer, term) {
-		for(let key in this.indexes) {
-			if(term in this.indexes[key] && answer[term] === undefined) {
+	_getTermResult(answer, term, name) {
+		let indexFile = this.getIndex(name);
+		if(name === null) {
+			for(let key in indexFile) {
+				if(term in indexFile[key] && answer[term] === undefined) {
+					answer[term] = {};
+					answer[term][key] = indexFile[key][term];
+				} else if(term in indexFile[key] && answer.hasOwnProperty(term)) {
+	 				answer[term][key] = indexFile[key][term];
+	 			} else {
+	 				return "Search text not found";
+	 			}
+			}
+			return answer;	
+		} else if (indexFile !== undefined) {
+			if(term in this.indexes[name]) {
 				answer[term] = {};
-				answer[term][key] = this.indexes[key][term];
-			} else if(term in this.indexes[key] && answer.hasOwnProperty(term)) {
- 				answer[term][key] = this.indexes[key][term];
- 			}
+				answer[term] = this.indexes[name][term];
+				return answer;
+			}
+			return "Search text not found";
 		}
-		return answer;
 	}
+
 
 	/** 
 	 * @function takes an array of arguments and returns an array of numbers that represents
@@ -104,12 +128,15 @@ class InvertedIndex {
 	 * @returns {Array}
 	 */
 	 
-	searchIndex(terms) {
+	searchIndex(terms, name = null) {
+	 	if (name && !this.indexes.hasOwnProperty(name)) {
+	 		return "No such File";
+	 	}
 	 	terms = InvertedIndex.textToArray(terms);
 	 	let result = [];
 	 	terms.forEach((term) => {
 	 		let fileResult = {};
-	 		let answer = this._getTermResult(fileResult, term);
+	 		let answer = this._getTermResult(fileResult, term, name);
 	 		result.push(answer);
 	 	});
 	 	return result;
