@@ -60,7 +60,7 @@ class InvertedIndex {
 		});
 		for(let element in indexArray) {
 			let textIndex = indexArray[element];
-			this.sortIndex(textIndex, element);
+			this._sortIndex(textIndex, element);
 		}
 		return this.indexes
 	}
