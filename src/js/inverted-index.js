@@ -67,8 +67,6 @@ class InvertedIndex {
         this._sortIndex(name, textIndex, element);
       }
     }
-    
-    // return this.indexes;
   }
 
 
