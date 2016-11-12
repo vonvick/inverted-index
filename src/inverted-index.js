@@ -22,7 +22,7 @@ class InvertedIndex {
 	 * @returns {Array} the result that will be returned after function call
 	 */
 	static textToArray(text) {
-		const result = text.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/);
+		const result = text.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/);
 		return result;
 	}
 
@@ -39,8 +39,9 @@ class InvertedIndex {
 			if(!this.indexes[bookName].hasOwnProperty([arrayItem[item]])) {
 				this.indexes[bookName][arrayItem[item]] = [];
 				this.indexes[bookName][arrayItem[item]].push(element); 
-			} else if(this.indexes[bookName].hasOwnProperty([arrayItem[item]]) 
-					&& this.indexes[bookName][arrayItem[item]].indexOf(element) === -1) {
+			} else if(
+				this.indexes[bookName].hasOwnProperty([arrayItem[item]]) && 
+				this.indexes[bookName][arrayItem[item]].indexOf(element) === -1) {
 				this.indexes[bookName][arrayItem[item]].push(element);
 			}
 		}

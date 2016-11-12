@@ -7,13 +7,9 @@
 	"camelcase"           : true,
 	"eqeqeq"              : true,
 	"undef"               : true,
-	"unset"               : true,
-	"validateIndentation" : 2,
+	"indent" 							: 2,
 	"curly"         			: true,
-	"quotmark"      			: "single",
-
-	// Relaxing
-	"esversion"           : 6,
+	"quotmark"      			: "double",
 
 	// Environments
 	"jasmine"       	 		: true,
