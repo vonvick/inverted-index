@@ -7,14 +7,14 @@
 	"camelcase"           : true,
 	"eqeqeq"              : true,
 	"undef"               : true,
-	"indent" 							: 2,
-	"curly"         			: true,
-	"quotmark"      			: "double",
+	"indent"              : 2,
+	"curly"               : true,
+	"quotmark"            : "double",
 
 	// Environments
-	"jasmine"       	 		: true,
+	"jasmine"             : true,
 	"node"                : true,
 	
 	// Custom Globals
-	"globals"       			: {} 
+	"globals"             : {} 
 }
