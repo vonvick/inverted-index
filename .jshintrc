@@ -9,6 +9,7 @@
 	"undef"               : true,
 	"indent"              : 2,
 	"curly"               : true,
+	"quotmark"            : "double",
 
 	// Environments
 	"jasmine"             : true,
