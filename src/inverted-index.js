@@ -65,6 +65,7 @@ class InvertedIndex {
 		return this.indexes
 	}
 
+
 	/**
 	 * @function takes an uploaded file as argument and read the contents of the file 
    * @returns {Object} 
@@ -74,5 +75,34 @@ class InvertedIndex {
 			return {};
 		}
 		return this.indexes[name];
+	}
+
+
+	/** 
+	 * @function takes an array of arguments and returns an array of numbers that represents
+	 * the index of the words
+	 * @param {string} terms 
+	 * @returns {Array}
+	 */
+	 
+	searchIndex(terms) {
+	 	terms = InvertedIndex.textToArray(terms);
+	 	let result = [];
+	 	for(let i = 0; i < terms.length; i++) {
+	 		let answer = {};
+	 		let fileResult = {};
+	 		for(let key in this.indexes){
+	 			if(terms[i] in this.indexes[key] && answer[terms[i]] === undefined) {
+	 				answer[terms[i]] = {};
+	 				fileResult[key] = this.indexes[key][terms[i]];
+	 				answer[terms[i]][key] = fileResult[key];
+	 			} else if(terms[i] in this.indexes[key] && answer.hasOwnProperty(terms[i])) {
+	 				fileResult[key] = this.indexes[key][terms[i]];
+	 				answer[terms[i]][key] = fileResult[key];
+	 			}
+	 		}
+	 		result.push(answer);
+	 	}
+	 	return result;
 	}
 }
