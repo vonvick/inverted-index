@@ -33,7 +33,7 @@ class InvertedIndex {
 	 * @param {}
 	 * @returns {Array} 
 	 */
-	sortIndex(arrayItem, element) {
+	_sortIndex(arrayItem, element) {
 		element = parseInt(element);
 		for(let item in arrayItem) {
 			if(!this.indexes.hasOwnProperty([arrayItem[item]])) {
@@ -79,6 +79,25 @@ class InvertedIndex {
 
 
 	/** 
+	 * @function return an object that contains the index of the search
+	 * word and the files they can be found. 
+	 * @param {string} terms 
+	 * @returns {Object}
+	 */
+
+	_getTermResult(answer, term) {
+		for(let key in this.indexes) {
+			if(term in this.indexes[key] && answer[term] === undefined) {
+				answer[term] = {};
+				answer[term][key] = this.indexes[key][term];
+			} else if(term in this.indexes[key] && answer.hasOwnProperty(term)) {
+ 				answer[term][key] = this.indexes[key][term];
+ 			}
+		}
+		return answer;
+	}
+
+	/** 
 	 * @function takes an array of arguments and returns an array of numbers that represents
 	 * the index of the words
 	 * @param {string} terms 
@@ -88,21 +107,11 @@ class InvertedIndex {
 	searchIndex(terms) {
 	 	terms = InvertedIndex.textToArray(terms);
 	 	let result = [];
-	 	for(let i = 0; i < terms.length; i++) {
-	 		let answer = {};
+	 	terms.forEach((term) => {
 	 		let fileResult = {};
-	 		for(let key in this.indexes){
-	 			if(terms[i] in this.indexes[key] && answer[terms[i]] === undefined) {
-	 				answer[terms[i]] = {};
-	 				fileResult[key] = this.indexes[key][terms[i]];
-	 				answer[terms[i]][key] = fileResult[key];
-	 			} else if(terms[i] in this.indexes[key] && answer.hasOwnProperty(terms[i])) {
-	 				fileResult[key] = this.indexes[key][terms[i]];
-	 				answer[terms[i]][key] = fileResult[key];
-	 			}
-	 		}
+	 		let answer = this._getTermResult(fileResult, term);
 	 		result.push(answer);
-	 	}
+	 	});
 	 	return result;
-	}
+	 }
 }
