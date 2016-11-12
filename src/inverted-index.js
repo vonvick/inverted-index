@@ -1,4 +1,3 @@
-
 /**
  *  InvertedIndex class constructor
  *  @class
