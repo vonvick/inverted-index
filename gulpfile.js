@@ -1,15 +1,53 @@
 var gulp = require("gulp");
 var babelify = require("babelify");
 var browserify = require("browserify");
+var cleanCSS = require("gulp-clean-css");
 var vinylSourceStream = require("vinyl-source-stream");
 var vinylBuffer = require("vinyl-buffer");
+
+var plugins = require("gulp-load-plugins")();
+
+var src = {
+	html: "./src/**/*.html",
+	css: "./src/css/style/style.css",
+	sass: "./src/css/sass/materialize.scss",
+	scripts: {
+		all: "./src/js/**/*.js",
+		app: "./src/js/inverted-index.js"
+	}
+};
+
+var build = "./build/";
+var out = {
+	html: build + "*.html",
+	css: build + "css/",
+	customcss: build + "css/style",
+	scripts: {
+		file: "app.min.js",
+		folder: build + "js/"
+	}
+};
 
 gulp.task("default", function() {
 
 });
+
+gulp.task("sass", function() {
+	return gulp.src(src.sass)
+    .pipe(plugins.sass())
+    .pipe(gulp.dest(out.css));
+});
+
+gulp.task("css", function() {
+	return gulp.src(src.css)
+    .pipe(cleanCSS())
+    .pipe(gulp.dest(out.customcss))
+		.pipe(plugins.connect.reload());
+});
+
 gulp.task("script", function() {
 	var sources = browserify({
-		entries: "./src/js/inverted-index.js",
+		entries: src.scripts.app,
 		debug: true
   })
   .transform(babelify.configure({
@@ -17,7 +55,41 @@ gulp.task("script", function() {
 	}));
 
   return sources.bundle()
-    .pipe(vinylSourceStream('app.min.js'))
+    .pipe(vinylSourceStream(out.scripts.file))
     .pipe(vinylBuffer())
-    .pipe(gulp.dest('./build/js/'));
+    .pipe(gulp.dest(out.scripts.folder));
 });
+
+gulp.task("html", function() {
+	return gulp.src(src.html)
+	.pipe(gulp.dest(build))
+	.pipe(plugins.connect.reload());
+});
+
+/* The jshint task runs jshint with ES6 support. */
+gulp.task("jshint", function() {
+	return gulp.src(src.scripts.all)
+		.pipe(plugins.jshint({
+			esnext: true // Enable ES6 support
+		}))
+		.pipe(plugins.jshint.reporter("jshint-stylish"));
+});
+
+gulp.task("serve", ["build", "watch"], function() {
+	plugins.connect.server({
+		root: build,
+		port: 8080,
+		livereload: true,
+		fallback: build + "index.html"
+	});
+});
+
+gulp.task("watch", function() {
+	gulp.watch(src.sass, ["sass"]);
+	gulp.watch(src.css, ["css"]);
+	gulp.watch(src.html, ["html"]);
+	gulp.watch(src.scripts.all, ["script"]);
+});
+
+gulp.task("build", ["script", "sass", "css", "html"]);
+gulp.task("default", ["serve"]);
