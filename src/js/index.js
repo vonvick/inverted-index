@@ -14,6 +14,7 @@ angular.module("indexApp", [])
     $scope.searchResult = [];
     $scope.message = "";
     $scope.searchText = "";
+    $scope.hidden = true;
 
     $scope.uploadFile = () => {
       const file = document.forms["upload-form"]["json-file"].files[0];
