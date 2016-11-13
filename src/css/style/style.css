@@ -28,3 +28,11 @@ main {
   font-size: 10px;
   color: red;
 }
+
+header, main, footer {
+  padding-left: 300px;
+}
+
+#slide-out {
+  padding-left: 20px;
+}

@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <title>Inverted Index</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/materialize.css">
     <link rel="stylesheet" href="css/style/style.css">
 
@@ -23,7 +25,28 @@
       </nav>
     </header>
     <main>
-      <div class="container">
+      <ul id="slide-out" class="side-nav fixed">
+        <li class="brand-logo"><img src="img/logo.jpg" height="150" width="250" class="center"/></li>
+        <li class="search">
+          <div class="nav-wrapper card">
+            <form>
+              <div class="input-field">
+                <input id="search" type="search" required>
+                <label for="search"><i class="material-icons">search</i></label>
+                <i class="material-icons">close</i>
+              </div>
+            </form>
+          </div>
+        </li>
+        <li>
+          <a class="waves-effect waves-light btn" href="#modal1">Add a File</a>
+          <p class="error">{{message}}</p>
+        </li>
+        <li ng-repeat="file in fileNames">
+          {{file}} <button class="waves-light waves-effect btn blue" ng-click="createIndex(file)">create index </button>
+        </li>
+      </ul>
+      <!--<div class="container">-->
         <div class="intro">
           <h3 class="center-align">INVERTED INDEX</h3>
           <p class="center-align">
@@ -52,8 +75,6 @@
             </div>
             <div class="col m6">
               <div class="center">
-                <a class="waves-effect waves-light btn" href="#modal1">Add a File</a>
-                <p class="error">{{message}}</p>
                 <!-- Modal Structure -->
                 <div id="modal1" class="modal">
                   <div class="modal-content">
@@ -74,8 +95,6 @@
                   </div>
                 </div>
               </div>
-              <div class="uploaded-file">
-              </div>
             </div>
           </div>
         <div class="row">
@@ -88,7 +107,7 @@
         </div>
         <div class="hidden search-result">
         </div>
-      </div>
+      <!--</div> container div -->
     </main>
     <footer class="page-footer cyan darken-2">
       <div class="footer-copyright">
