@@ -1,21 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<title>Inverted Index</title>
-		<link rel="stylesheet" href="css/materialize.css">
-		<link rel="stylesheet" href="css/style/style.css">
-		<script src="js/app.min.js"></script>
-	</head>
-	<body>
-		<nav>
-			<div class="container">
-				<div class="nav-wrapper">
-					<a href="#" class="brand-logo">INVERTED INDEX</a>
-				</div>
-			</div>
-  	</nav>
-		<div class="container">
-		</div>
-	</body>
+<html lang="en" ng-app="indexApp">
+  <head>
+    <meta charset="UTF-8">
+    <title>Inverted Index</title>
+    <link rel="stylesheet" href="css/materialize.css">
+    <link rel="stylesheet" href="css/style/style.css">
+
+    <script type="text/javascript" src="libs/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="libs/materialize.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>-->
+    <script src="js/app.min.js"></script>
+    <script type="text/javascript" src="js/helpers.js"></script>
+  </head>
+  <body ng-controller="InvertedIndexController">
+    <header>
+      <nav class="cyan">
+        <div class="container">
+          <div class="nav-wrapper">
+            <a href="#" class="brand-logo">INVERTED INDEX</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <div class="container">
+        <div class="intro">
+          <h3 class="center-align">INVERTED INDEX</h3>
+          <p class="center-align">
+            This application makes use of inverted index a type of elastic search algorithm
+            that makes it possible to perform fast full-text search of documents. It get a list of all words
+            in a docuemnt and indexes them by storing the word and where they appear in the document.
+          </p>
+          <div class="row">
+            <div class="col m6">
+              <h5>Instructions</h5>
+              <p>
+                Follow the instructions written below to use the application
+              </p>
+              <ol>
+                <li>create a ".json" file that is an array of object in the following format:
+                  <ul>
+                    <li><img class="responsive-img" src="img/how-to.png"/></li>
+                  </ul>
+                </li>
+                <li>Upload the .json file you wish have created and wish to index.</li>
+                <li>The files are supposed to be uploaded one after the other(asynchronously).</li>
+                <li>After successful upload of file(s), You can click the create index button  for each uploaded file.
+                  this creates an index of the clicked file.</li>
+                <li>You can search for a word or words by entering a word in the search box provided above and click the search button to search.</li>
+              </ol> 
+            </div>
+            <div class="col m6">
+              <div class="center">
+                <a class="waves-effect waves-light btn" href="#modal1">Add a File</a>
+                <p class="error">{{message}}</p>
+                <!-- Modal Structure -->
+                <div id="modal1" class="modal">
+                  <div class="modal-content">
+                    <form action="#" id="upload-form">
+                      <div class="file-field input-field">
+                        <div class="btn">
+                          <span>File</span>
+                          <input id="json-file" type="file">
+                        </div>
+                        <div class="file-path-wrapper">
+                          <input class="file-path validate" type="text">
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <a class=" modal-action modal-close waves-effect waves-light btn green" ng-click="uploadFile()">upload</a>
+                  </div>
+                </div>
+              </div>
+              <div class="uploaded-file">
+              </div>
+            </div>
+          </div>
+        <div class="row">
+          <p>Your feedback is highly appreciated. Send your thoughts and comments to 
+            <a href="mailto:victor.nwaiwu@andela.com"></a>
+          </p>
+        </div>
+        </div>
+        <div class="hidden indexed-file">
+        </div>
+        <div class="hidden search-result">
+        </div>
+      </div>
+    </main>
+    <footer class="page-footer cyan darken-2">
+      <div class="footer-copyright">
+        <div class="container">
+          © 2016 Copyright Victor Nwaiwu
+          <a class="grey-text text-lighten-4 right" href="#!">Andela D0 first checkpoint</a>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>
