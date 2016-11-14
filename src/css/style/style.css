@@ -11,7 +11,7 @@ body {
 }
 
 .container {
-  width: 80%;
+  width: 95%;
 }
 
 body {
@@ -35,4 +35,9 @@ header, main, footer {
 
 #slide-out {
   padding-left: 20px;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
 }
