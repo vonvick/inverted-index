@@ -11,7 +11,9 @@
     <script type="text/javascript" src="libs/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="libs/materialize.min.js"></script>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>-->
-    <script src="js/app.min.js"></script>
+    
+    <script type="text/javascript" src="js/inverted-index.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/helpers.js"></script>
   </head>
   <body ng-controller="InvertedIndexController">
@@ -44,6 +46,7 @@
         </li>
         <li ng-repeat="file in fileNames">
           {{file}} <button class="waves-light waves-effect btn blue" ng-click="createIndex(file)">create index </button>
+          <button class="waves-light waves-effect btn pink" ng-click="getIndex(file)">get index </button>
         </li>
       </ul>
       <!--<div class="container">-->
@@ -75,6 +78,20 @@
             </div>
             <div class="col m6">
               <div class="center">
+                <table>
+                  <thead>
+                    <tr>
+                      <th colspan="1">Tokens</th>
+                      <th colspan="{{document.length}}">{{title}}</th>
+                    </tr>
+                    <tr>
+                      <th>Items</th>
+                     <th ng-repeat="j in document | filter:q as results">Doc{{$index + 1}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
                 <!-- Modal Structure -->
                 <div id="modal1" class="modal">
                   <div class="modal-content">
