@@ -11,6 +11,7 @@ angular.module("indexApp", [])
 
     $scope.files = {};
     $scope.fileNames = [];
+    // $scope.document = [];
     $scope.searchResult = [];
     $scope.message = "";
     $scope.searchText = "";
@@ -48,6 +49,30 @@ angular.module("indexApp", [])
           }
         };
         reader.readAsBinaryString(file);
+      }
+    };
+
+    $scope.createIndex = (obj) => {
+      const fileData = $scope.files[obj];
+      const create = index.createIndex(obj, fileData);
+    };
+
+    $scope.getIndex = (title = null) => {
+      if(title === null) {
+        $scope.$apply(() => {
+          $scope.hidden = false;
+        });
+        $scope.indexed = index.getIndex(title = null);
+        return;
+      } else {
+        $scope.indexed = index.getIndex(title);
+        $scope.document = $scope.files[title];
+        $scope.title = title;
+        // write code to disply result
+        
+        console.log($scope.indexed);
+        console.log($scope.document);
+        return;
       }
     };
 

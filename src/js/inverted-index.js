@@ -3,18 +3,18 @@
  *  @class
  */
 
-export default class InvertedIndex {
+class InvertedIndex {
   /**
    *  class constructor
    *  @constructor
    */
   constructor() {
-    this.indexes = [];
+    this.indexes = {};
   }
 
 
   /**
-   * coverts the string provided to lower case, strips the string of all 
+   * converts the string provided to lower case, strips the string of all 
    * special characters, extra spaces and converts the result into an Array
    * @static 
    * @param {string} text the text to be converted
@@ -47,15 +47,31 @@ export default class InvertedIndex {
   }
 
   /**
+   * reads the content of a json file and returns false if the file is empty or 
+   * returns true if there are documents in the file.
+   * 
+   */
+  readBookData(book) {
+    if(book.length < 1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
    * @function takes a file path as argument and read the contents of the file 
    * @param {string} name the name of the file
    * @param {Array} content the content of the file
    * @returns {Array} 
    */
   createIndex(name, fileContent) {
+    if(!this.readBookData) {
+      return false;
+    } 
     const indexArray = [];
     fileContent.forEach((item) => {
-      let text = item.title + " " + item.content;
+      let text = item.title + " " + item.text;
       let textArray = InvertedIndex.textToArray(text);
       indexArray.push(textArray);
     });
@@ -141,3 +157,5 @@ export default class InvertedIndex {
     return result;
    }
 }
+
+module.exports = InvertedIndex
