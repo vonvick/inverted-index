@@ -44,4 +44,17 @@ describe("Inverted Index", () => {
     expect(indexInstance).toEqual(jasmine.any(Object));
     expect(Object.keys(invertedIndex.indexes).length).toBe(0);
   });
+
+  describe("Read book data", () => {
+    it("should read the content of a json file and return false if the file is empty", () => {
+      let book = [];
+      let readBook = invertedIndex.readBookData(book);
+      expect(readBook).toBe(false);
+    });
+    it("should read the content of a json file and return true if the file is not empty", () => {
+      let book = [];
+      let readBook2 = invertedIndex.readBookData(books);
+      expect(readBook2).toBe(true);
+    });
+  });
 });
