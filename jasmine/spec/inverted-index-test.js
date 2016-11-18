@@ -56,5 +56,22 @@ describe("Inverted Index", () => {
       let readBook2 = invertedIndex.readBookData(books);
       expect(readBook2).toBe(true);
     });
+    
+  });
+
+  describe("Populate index", () => {
+    it("should create the index once the file has been read", () => {
+      let createIndex = invertedIndex.createIndex("books", books);
+      expect(invertedIndex.indexes.books).toBeDefined();
+    });
+    it("should return an object of all created index", () => {
+      let createIndex = invertedIndex.createIndex("books", books);
+      expect(invertedIndex.indexes.books).toEqual(jasmine.any(Object));
+    });
+    it("should return an array of a particular word showing indexes", () => {
+      let createIndex = invertedIndex.createIndex("books", books);
+      expect(invertedIndex.indexes.books.and).toEqual([0,1,2]);
+      expect(invertedIndex.indexes.books.of).toEqual([0,1]);
+    });
   });
 });
