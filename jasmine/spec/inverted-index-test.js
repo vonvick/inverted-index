@@ -73,5 +73,30 @@ describe("Inverted Index", () => {
       expect(invertedIndex.indexes.books.and).toEqual([0,1,2]);
       expect(invertedIndex.indexes.books.of).toEqual([0,1]);
     });
+
+  });
+
+  describe("Get Index", () => {
+    it("should get the indexes of a particular uploaded file", () => {
+      let createIndex = invertedIndex.createIndex("books", books);
+      let getIndex = invertedIndex.getIndex("books");
+      expect(getIndex).toBeDefined();
+    });
+    it("should return an empty object for an uploaded file that has not been indexed", () => {
+      let getIndex = invertedIndex.getIndex("books");
+      expect(getIndex).toEqual({});
+    });
+    it("should get all the indexes of all uploaded file", () => {
+      let createIndex = invertedIndex.createIndex("books", books);
+      let createIndex2 = invertedIndex.createIndex("books1", books1);
+      let getIndex = invertedIndex.getIndex();
+      expect(Object.keys(getIndex).length).toBe(2);
+    });
+    it("should return an empty object if no indexes has been created", () => {
+      let createIndex = invertedIndex.createIndex("books", books);
+      let createIndex2 = invertedIndex.createIndex("books1", books1);
+      let getIndex = invertedIndex.getIndex();
+      expect(Object.keys(getIndex).length).toBe(2);
+    });
   });
 });
