@@ -31774,6 +31774,9 @@ module.exports = angular;
 },{"./angular":1}],3:[function(require,module,exports){
 "use strict";
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+// import the angular package and other components
+
 var _angular = require("angular");
 
 var _angular2 = _interopRequireDefault(_angular);
@@ -31784,32 +31787,48 @@ var _invertedIndex2 = _interopRequireDefault(_invertedIndex);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import the angular package and other components
-
 _angular2.default.module("indexApp", []).controller("InvertedIndexController", ["$scope", function ($scope) {
   var index = new _invertedIndex2.default();
 
-  $scope.files = [];
+  $scope.files = {};
+  $scope.fileNames = [];
+  // $scope.document = [];
   $scope.searchResult = [];
   $scope.message = "";
-  $scope.searchText = "I love you";
+  $scope.searchText = "";
+  $scope.hidden = true;
 
   $scope.uploadFile = function () {
     var file = document.forms["upload-form"]["json-file"].files[0];
+    var fileName = file.name.replace(/\s+/, "");
     if (file) {
-      if (!file.name.match(/\.json$/i)) {
+      if (!fileName.match(/\.json$/i)) {
         $scope.message = "Invalid file format";
         return;
       }
       var reader = new FileReader();
       reader.onload = function (evt) {
         try {
-          var jsonData = JSON.parse(evt.target.result);
-          if (!(jsonData[0].title || jsonData[0].text)) {
-            $scope.message = "The .json file did not follow " + "the required format";
-            return;
-          }
-          console.log(jsonData);
+          var _ret = function () {
+            var jsonData = JSON.parse(evt.target.result);
+            if (jsonData.find(findWrongFormat)) {
+              $scope.$apply(function () {
+                $scope.message = "The .json file did not follow " + "the required format";
+              });
+              return {
+                v: void 0
+              };
+            }
+            $scope.$apply(function () {
+              $scope.fileNames.push(fileName);
+              $scope.files[fileName] = jsonData;
+              $scope.message = "The file has been successfully uploaded";
+            });
+            console.log(fileName);
+            console.log(jsonData);
+          }();
+
+          if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
         } catch (error) {
           $scope.message = "Invalid .json file";
         }
@@ -31817,14 +31836,43 @@ _angular2.default.module("indexApp", []).controller("InvertedIndexController", [
       reader.readAsBinaryString(file);
     }
   };
+
+  $scope.createIndex = function (obj) {
+    var fileData = $scope.files[obj];
+    var create = index.createIndex(obj, fileData);
+  };
+
+  $scope.getIndex = function () {
+    var title = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+    if (title === null) {
+      $scope.$apply(function () {
+        $scope.hidden = false;
+      });
+      $scope.indexed = index.getIndex(title = null);
+      return;
+    } else {
+      $scope.indexed = index.getIndex(title);
+      $scope.document = $scope.files[title];
+      $scope.title = title;
+      // write code to disply result
+
+      console.log($scope.indexed);
+      console.log($scope.document);
+      return;
+    }
+  };
+
+  function findWrongFormat(element) {
+    if (!element.hasOwnProperty("title") || !element.hasOwnProperty("text")) {
+      return true;
+    }
+    return false;
+  }
 }]);
 
 },{"./inverted-index.js":4,"angular":2}],4:[function(require,module,exports){
 "use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -31843,11 +31891,11 @@ var InvertedIndex = function () {
   function InvertedIndex() {
     _classCallCheck(this, InvertedIndex);
 
-    this.indexes = [];
+    this.indexes = {};
   }
 
   /**
-   * coverts the string provided to lower case, strips the string of all 
+   * converts the string provided to lower case, strips the string of all 
    * special characters, extra spaces and converts the result into an Array
    * @static 
    * @param {string} text the text to be converted
@@ -31878,6 +31926,22 @@ var InvertedIndex = function () {
     }
 
     /**
+     * reads the content of a json file and returns false if the file is empty or 
+     * returns true if there are documents in the file.
+     * 
+     */
+
+  }, {
+    key: "readBookData",
+    value: function readBookData(book) {
+      if (book.length < 1) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    /**
      * @function takes a file path as argument and read the contents of the file 
      * @param {string} name the name of the file
      * @param {Array} content the content of the file
@@ -31887,9 +31951,12 @@ var InvertedIndex = function () {
   }, {
     key: "createIndex",
     value: function createIndex(name, fileContent) {
+      if (!this.readBookData) {
+        return false;
+      }
       var indexArray = [];
       fileContent.forEach(function (item) {
-        var text = item.title + " " + item.content;
+        var text = item.title + " " + item.text;
         var textArray = InvertedIndex.textToArray(text);
         indexArray.push(textArray);
       });
@@ -31995,6 +32062,6 @@ var InvertedIndex = function () {
   return InvertedIndex;
 }();
 
-exports.default = InvertedIndex;
+module.exports = InvertedIndex;
 
 },{}]},{},[3])

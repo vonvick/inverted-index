@@ -1,6 +1,6 @@
 var gulp = require("gulp");
 var babelify = require("babelify");
-var browserify = require("browserify");
+// var browserify = require("browserify");
 var cleanCSS = require("gulp-clean-css");
 var vinylSourceStream = require("vinyl-source-stream");
 var vinylBuffer = require("vinyl-buffer");
@@ -34,20 +34,12 @@ gulp.task("default", function() {
 
 });
 
-gulp.task("script", function() {
-  var sources = browserify({
-    entries: src.scripts.app,
-    debug: true
-  })
-  .transform(babelify.configure({
-    presets: ["es2015"]
-  }));
-
-  return sources.bundle()
-    .pipe(vinylSourceStream(out.scripts.file))
-    .pipe(vinylBuffer())
-    .pipe(gulp.dest(out.scripts.folder))
-    .pipe(plugins.connect.reload());
+gulp.task("script", function () {
+  gulp.src("./src/js/*.js")
+    .pipe(plugins.browserify({
+      transform: ["babelify"],
+    }))
+    .pipe(gulp.dest("./build/js"));
 });
 
 gulp.task("sass", function() {
