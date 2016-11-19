@@ -3,7 +3,7 @@
  *  @class
  */
 
-export default class InvertedIndex {
+class InvertedIndex {
   /**
    *  class constructor
    *  @constructor
