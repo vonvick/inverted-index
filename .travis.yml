@@ -6,3 +6,6 @@ node_js:
 before_script:
   - export CHROME_BIN=chromium-browser
   - export DISPLAY=:99.0
+
+after_success:
+  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
