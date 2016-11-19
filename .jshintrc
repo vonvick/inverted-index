@@ -1,18 +1,20 @@
 {
-  "esversion"           : 6,
-  "camelcase"           : true,
-  "eqeqeq"              : true,
-  "undef"               : true,
-  "indent"              : 2,
-  "curly"               : true,
-  "quotmark"            : "double",
-  "maxlen"              : 80,
+	// JSHint Default Configuration File (as on JSHint website)
+	// See http://jshint.com/docs/ for more details
 
-  "jasmine"             : true,
-  "node"                : true,
-  
-  "globals"             : {
-    "atom"              : true,
-    "window"            :true
-  } 
+	// Enforcing
+	"esnext"              : true,
+	"camelcase"           : true,
+	"eqeqeq"              : true,
+	"undef"               : true,
+	"indent"              : 2,
+	"curly"               : true,
+	"quotmark"            : "double",
+
+	// Environments
+	"jasmine"             : true,
+	"node"                : true,
+	
+	// Custom Globals
+	"globals"             : {} 
 }
