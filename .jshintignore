@@ -2,3 +2,5 @@ build/js/*
 build/libs/*
 node_modules/*
 src/libs/*
+jasmine/spec/bundle.js
+jasmine/spec/bundle.js.map
