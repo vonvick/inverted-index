@@ -32,7 +32,6 @@ describe("Inverted Index", () => {
       let readBook2 = invertedIndex.readBookData(books);
       expect(readBook2).toBe(true);
     });
-    
   });
 
   describe("Populate index", () => {
@@ -49,7 +48,6 @@ describe("Inverted Index", () => {
       expect(invertedIndex.indexes.books.and).toEqual([0,1]);
       expect(invertedIndex.indexes.books.of).toEqual([0,1]);
     });
-
   });
 
   describe("Get Index", () => {
