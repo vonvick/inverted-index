@@ -1,4 +1,4 @@
-
+var InvertedIndex = require("./src/js/inverted-index");
 describe("Inverted Index", () => {
   const invertedIndex = new InvertedIndex();
   let books = [];
@@ -33,11 +33,11 @@ describe("Inverted Index", () => {
         "text": "A wizard comes to town with a powerful ring and falls into a rabbit hole."
       }
     ];
-  })
+  });
 
   afterEach(() => {
     invertedIndex.indexes = {};
-  })
+  });
   
   it("should return the instance of the class", () => {
     let indexInstance = invertedIndex;
