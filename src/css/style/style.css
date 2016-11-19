@@ -11,7 +11,7 @@ body {
 }
 
 .container {
-  width: 80%;
+  width: 95%;
 }
 
 body {
@@ -27,4 +27,17 @@ main {
 .error {
   font-size: 10px;
   color: red;
+}
+
+header, main, footer {
+  padding-left: 300px;
+}
+
+#slide-out {
+  padding-left: 20px;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
 }
