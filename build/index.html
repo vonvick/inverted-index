@@ -3,17 +3,13 @@
   <head>
     <meta charset="UTF-8">
     <title>Inverted Index</title>
-
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/materialize.css">
     <link rel="stylesheet" href="css/style/style.css">
 
     <script type="text/javascript" src="libs/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="libs/materialize.min.js"></script>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>-->
-    
-    <script type="text/javascript" src="js/inverted-index.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
+    <script src="js/app.min.js"></script>
     <script type="text/javascript" src="js/helpers.js"></script>
   </head>
   <body ng-controller="InvertedIndexController">
@@ -27,29 +23,7 @@
       </nav>
     </header>
     <main>
-      <ul id="slide-out" class="side-nav fixed">
-        <li class="brand-logo"><img src="img/logo.jpg" height="150" width="250" class="center"/></li>
-        <li class="search">
-          <div class="nav-wrapper card">
-            <form>
-              <div class="input-field">
-                <input id="search" type="search" required>
-                <label for="search"><i class="material-icons">search</i></label>
-                <i class="material-icons">close</i>
-              </div>
-            </form>
-          </div>
-        </li>
-        <li>
-          <a class="waves-effect waves-light btn" href="#modal1">Add a File</a>
-          <p class="error">{{message}}</p>
-        </li>
-        <li ng-repeat="file in fileNames">
-          {{file}} <button class="waves-light waves-effect btn blue" ng-click="createIndex(file)">create index </button>
-          <button class="waves-light waves-effect btn pink" ng-click="getIndex(file)">get index </button>
-        </li>
-      </ul>
-      <!--<div class="container">-->
+      <div class="container">
         <div class="intro">
           <h3 class="center-align">INVERTED INDEX</h3>
           <p class="center-align">
@@ -78,20 +52,8 @@
             </div>
             <div class="col m6">
               <div class="center">
-                <table>
-                  <thead>
-                    <tr>
-                      <th colspan="1">Tokens</th>
-                      <th colspan="{{document.length}}">{{title}}</th>
-                    </tr>
-                    <tr>
-                      <th>Items</th>
-                     <th ng-repeat="j in document | filter:q as results">Doc{{$index + 1}}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
+                <a class="waves-effect waves-light btn" href="#modal1">Add a File</a>
+                <p class="error">{{message}}</p>
                 <!-- Modal Structure -->
                 <div id="modal1" class="modal">
                   <div class="modal-content">
@@ -112,20 +74,21 @@
                   </div>
                 </div>
               </div>
+              <div class="uploaded-file">
+              </div>
             </div>
           </div>
         <div class="row">
-          <p>Your feedback is highly appreciated. Send your thoughts and comments to:
+          <p>Your feedback is highly appreciated. Send your thoughts and comments to 
             <a href="mailto:victor.nwaiwu@andela.com"></a>
           </p>
         </div>
         </div>
-        <div ng-hide="hidden" class="indexed-file">
-          I am a boy ooo
+        <div class="hidden indexed-file">
         </div>
-        <div ng-hide="hidden" class="search-result">
+        <div class="hidden search-result">
         </div>
-      <!--</div> container div -->
+      </div>
     </main>
     <footer class="page-footer cyan darken-2">
       <div class="footer-copyright">
