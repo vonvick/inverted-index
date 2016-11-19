@@ -14,8 +14,8 @@ export default class InvertedIndex {
 
 
   /**
-   * coverts the string provided to lower case, strips the string of all 
-   * special characters, extra spaces and converts the result into an Array
+   * coverts the string provided to lower case, strips the string of all special 
+   * characters, extra spaces and converts the result into an Array
    * @static 
    * @param {string} text the text to be converted
    * @returns {Array} the result that will be returned after function call
@@ -71,8 +71,7 @@ export default class InvertedIndex {
 
 
   /**
-   * @function takes an uploaded file as argument and read the contents of the
-   * file 
+   * @function takes an uploaded file as argument and read the contents of the file 
    * @returns {Object} 
    */
   getIndex(name = null) {
@@ -121,8 +120,8 @@ export default class InvertedIndex {
 
 
   /** 
-   * @function takes an array of arguments and returns an array of numbers that 
-   * represents the index of the words
+   * @function takes an array of arguments and returns an array of numbers that represents
+   * the index of the words
    * @param {string} terms 
    * @returns {Array}
    */
