@@ -1,6 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -128,28 +130,21 @@ var InvertedIndex = function () {
 
   }, {
     key: "_getTermResult",
-    value: function _getTermResult(answer, term, name) {
-      var indexFile = this.getIndex(name);
-      if (name === null) {
-        for (var key in indexFile) {
-          if (term in indexFile[key] && answer[term] === undefined) {
-            answer[term] = {};
-            answer[term][key] = indexFile[key][term];
-          } else if (term in indexFile[key] && answer.hasOwnProperty(term)) {
-            answer[term][key] = indexFile[key][term];
-          } else {
-            return "Search text not found";
+    value: function _getTermResult(searchFile, terms) {
+      var result = [];
+      var indexTerm = Object.keys(searchFile);
+      indexTerm.forEach(function (file) {
+        var files = {};
+        files[file] = {};
+        terms.forEach(function (term) {
+          if (searchFile[file].hasOwnProperty(term)) {
+            files[file][term] = {};
+            files[file][term] = searchFile[file][term];
           }
-        }
-        return answer;
-      } else if (indexFile !== undefined) {
-        if (term in this.indexes[name]) {
-          answer[term] = {};
-          answer[term] = this.indexes[name][term];
-          return answer;
-        }
-        return "Search text not found";
-      }
+        });
+        result.push(files);
+      });
+      return result;
     }
 
     /** 
@@ -171,12 +166,28 @@ var InvertedIndex = function () {
       }
       terms = InvertedIndex.textToArray(terms);
       var result = [];
-      terms.forEach(function (term) {
-        var fileResult = {};
-        var answer = _this._getTermResult(fileResult, term, name);
-        result.push(answer);
-      });
-      return result;
+      if (name === null) {
+        var searchFile = this.indexes;
+        result = this._getTermResult(searchFile, terms);
+        return result;
+      } else {
+        var _ret = function () {
+          var searchFile = _this.indexes[name];
+          var file = {};
+          file[name] = {};
+          terms.forEach(function (term) {
+            if (term in searchFile) {
+              file[name][term] = searchFile[term];
+            }
+          });
+          result.push(file);
+          return {
+            v: result
+          };
+        }();
+
+        if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+      }
     }
   }], [{
     key: "textToArray",

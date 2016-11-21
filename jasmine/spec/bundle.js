@@ -127,15 +127,15 @@
 	      var createIndex = invertedIndex.createIndex("books", books);
 	      var getIndex = invertedIndex.getIndex("books");
 	      var searchIndex = invertedIndex.searchIndex("and");
-	      expect(searchIndex[0].and.books).toEqual([0, 1]);
+	      expect(searchIndex[0].books.and).toEqual([0, 1]);
 	    });
 	    it("should return an array of Objects containing the search parameter, the files and their indexes", function () {
 	      var createIndex = invertedIndex.createIndex("books", books);
 	      var createIndex2 = invertedIndex.createIndex("books1", books1);
 	      var getIndex = invertedIndex.getIndex();
 	      var searchIndex = invertedIndex.searchIndex("and");
-	      expect(searchIndex[0].and.books).toEqual([0, 1]);
-	      expect(searchIndex[0].and.books1).toEqual([0, 1]);
+	      expect(searchIndex[0].books.and).toEqual([0, 1]);
+	      expect(searchIndex[1].books1.and).toEqual([0, 1]);
 	    });
 	    it("should return an array of Objects containing the search parameter in the selected file and its indexes", function () {
 	      var createIndex = invertedIndex.createIndex("books", books);
@@ -143,9 +143,9 @@
 	      var getIndex = invertedIndex.getIndex();
 	      var searchIndex = invertedIndex.searchIndex("and", "books");
 	      var searchIndex2 = invertedIndex.searchIndex("and", "books1");
-	      expect(searchIndex[0].and).toEqual([0, 1]);
+	      expect(searchIndex[0].books.and).toEqual([0, 1]);
 	      expect(Object.keys(searchIndex[0]).length).toBe(1);
-	      expect(searchIndex2[0].and).toEqual([0, 1]);
+	      expect(searchIndex2[0].books1.and).toEqual([0, 1]);
 	      expect(Object.keys(searchIndex2[0]).length).toBe(1);
 	    });
 	  });
@@ -156,6 +156,8 @@
 /***/ function(module, exports) {
 
 	"use strict";
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -284,28 +286,21 @@
 	
 	  }, {
 	    key: "_getTermResult",
-	    value: function _getTermResult(answer, term, name) {
-	      var indexFile = this.getIndex(name);
-	      if (name === null) {
-	        for (var key in indexFile) {
-	          if (term in indexFile[key] && answer[term] === undefined) {
-	            answer[term] = {};
-	            answer[term][key] = indexFile[key][term];
-	          } else if (term in indexFile[key] && answer.hasOwnProperty(term)) {
-	            answer[term][key] = indexFile[key][term];
-	          } else {
-	            return "Search text not found";
+	    value: function _getTermResult(searchFile, terms) {
+	      var result = [];
+	      var indexTerm = Object.keys(searchFile);
+	      indexTerm.forEach(function (file) {
+	        var files = {};
+	        files[file] = {};
+	        terms.forEach(function (term) {
+	          if (searchFile[file].hasOwnProperty(term)) {
+	            files[file][term] = {};
+	            files[file][term] = searchFile[file][term];
 	          }
-	        }
-	        return answer;
-	      } else if (indexFile !== undefined) {
-	        if (term in this.indexes[name]) {
-	          answer[term] = {};
-	          answer[term] = this.indexes[name][term];
-	          return answer;
-	        }
-	        return "Search text not found";
-	      }
+	        });
+	        result.push(files);
+	      });
+	      return result;
 	    }
 	
 	    /** 
@@ -327,12 +322,28 @@
 	      }
 	      terms = InvertedIndex.textToArray(terms);
 	      var result = [];
-	      terms.forEach(function (term) {
-	        var fileResult = {};
-	        var answer = _this._getTermResult(fileResult, term, name);
-	        result.push(answer);
-	      });
-	      return result;
+	      if (name === null) {
+	        var searchFile = this.indexes;
+	        result = this._getTermResult(searchFile, terms);
+	        return result;
+	      } else {
+	        var _ret = function () {
+	          var searchFile = _this.indexes[name];
+	          var file = {};
+	          file[name] = {};
+	          terms.forEach(function (term) {
+	            if (term in searchFile) {
+	              file[name][term] = searchFile[term];
+	            }
+	          });
+	          result.push(file);
+	          return {
+	            v: result
+	          };
+	        }();
+	
+	        if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+	      }
 	    }
 	  }], [{
 	    key: "textToArray",

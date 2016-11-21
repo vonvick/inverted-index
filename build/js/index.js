@@ -31792,11 +31792,11 @@ _angular2.default.module("indexApp", []).controller("InvertedIndexController", [
 
   $scope.files = {};
   $scope.fileNames = [];
-  // $scope.document = [];
-  $scope.searchResult = [];
   $scope.message = "";
   $scope.searchText = "";
-  $scope.hidden = true;
+  $scope.showIntro = true;
+  $scope.hideTable = true;
+  $scope.showResult = false;
 
   $scope.uploadFile = function () {
     var file = document.forms["upload-form"]["json-file"].files[0];
@@ -31818,14 +31818,17 @@ _angular2.default.module("indexApp", []).controller("InvertedIndexController", [
               return {
                 v: void 0
               };
+            } else if ($scope.fileNames.includes(fileName)) {
+              $scope.message = "The file has been uploaded before";
+              return {
+                v: void 0
+              };
             }
             $scope.$apply(function () {
               $scope.fileNames.push(fileName);
               $scope.files[fileName] = jsonData;
               $scope.message = "The file has been successfully uploaded";
             });
-            console.log(fileName);
-            console.log(jsonData);
           }();
 
           if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
@@ -31842,24 +31845,32 @@ _angular2.default.module("indexApp", []).controller("InvertedIndexController", [
     var create = index.createIndex(obj, fileData);
   };
 
-  $scope.getIndex = function () {
-    var title = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  $scope.getIndex = function (title) {
+    $scope.indexed = index.getIndex(title);
+    $scope.document = $scope.files[title];
+    $scope.title = title;
+    $scope.showIntro = false;
+    $scope.hideTable = false;
+    $scope.showResult = false;
+    return;
+  };
 
-    if (title === null) {
-      $scope.$apply(function () {
-        $scope.hidden = false;
-      });
-      $scope.indexed = index.getIndex(title = null);
-      return;
+  $scope.searchIndex = function () {
+    var searchItem = $scope.searchText;
+    var file = $scope.selected;
+
+    if (file === undefined) {
+      $scope.message = "You are searching an unindexed file";
+    } else if (file === "all") {
+      $scope.searchResult = index.searchIndex(searchItem, file = null);
+      $scope.searchTerms = searchItem;
+      $scope.showResult = true;
+      $scope.hideTable = true;
     } else {
-      $scope.indexed = index.getIndex(title);
-      $scope.document = $scope.files[title];
-      $scope.title = title;
-      // write code to disply result
-
-      console.log($scope.indexed);
-      console.log($scope.document);
-      return;
+      $scope.searchResult = index.searchIndex(searchItem, file);
+      $scope.searchTerms = searchItem;
+      $scope.showResult = true;
+      $scope.hideTable = true;
     }
   };
 
@@ -31873,6 +31884,8 @@ _angular2.default.module("indexApp", []).controller("InvertedIndexController", [
 
 },{"./inverted-index.js":4,"angular":2}],4:[function(require,module,exports){
 "use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -32001,28 +32014,21 @@ var InvertedIndex = function () {
 
   }, {
     key: "_getTermResult",
-    value: function _getTermResult(answer, term, name) {
-      var indexFile = this.getIndex(name);
-      if (name === null) {
-        for (var key in indexFile) {
-          if (term in indexFile[key] && answer[term] === undefined) {
-            answer[term] = {};
-            answer[term][key] = indexFile[key][term];
-          } else if (term in indexFile[key] && answer.hasOwnProperty(term)) {
-            answer[term][key] = indexFile[key][term];
-          } else {
-            return "Search text not found";
+    value: function _getTermResult(searchFile, terms) {
+      var result = [];
+      var indexTerm = Object.keys(searchFile);
+      indexTerm.forEach(function (file) {
+        var files = {};
+        files[file] = {};
+        terms.forEach(function (term) {
+          if (searchFile[file].hasOwnProperty(term)) {
+            files[file][term] = {};
+            files[file][term] = searchFile[file][term];
           }
-        }
-        return answer;
-      } else if (indexFile !== undefined) {
-        if (term in this.indexes[name]) {
-          answer[term] = {};
-          answer[term] = this.indexes[name][term];
-          return answer;
-        }
-        return "Search text not found";
-      }
+        });
+        result.push(files);
+      });
+      return result;
     }
 
     /** 
@@ -32044,12 +32050,28 @@ var InvertedIndex = function () {
       }
       terms = InvertedIndex.textToArray(terms);
       var result = [];
-      terms.forEach(function (term) {
-        var fileResult = {};
-        var answer = _this._getTermResult(fileResult, term, name);
-        result.push(answer);
-      });
-      return result;
+      if (name === null) {
+        var searchFile = this.indexes;
+        result = this._getTermResult(searchFile, terms);
+        return result;
+      } else {
+        var _ret = function () {
+          var searchFile = _this.indexes[name];
+          var file = {};
+          file[name] = {};
+          terms.forEach(function (term) {
+            if (term in searchFile) {
+              file[name][term] = searchFile[term];
+            }
+          });
+          result.push(file);
+          return {
+            v: result
+          };
+        }();
+
+        if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+      }
     }
   }], [{
     key: "textToArray",

@@ -11,11 +11,11 @@ angular.module("indexApp", [])
 
     $scope.files = {};
     $scope.fileNames = [];
-    // $scope.document = [];
-    $scope.searchResult = [];
     $scope.message = "";
     $scope.searchText = "";
-    $scope.hidden = true;
+    $scope.showIntro = true;
+    $scope.hideTable = true;
+    $scope.showResult = false;
 
     $scope.uploadFile = () => {
       const file = document.forms["upload-form"]["json-file"].files[0];
@@ -35,14 +35,15 @@ angular.module("indexApp", [])
                     "the required format";
                 });
                 return;
-              } 
+              } else if($scope.fileNames.includes(fileName)) {
+                $scope.message = "The file has been uploaded before";
+                return;
+              }
               $scope.$apply(() => {
                 $scope.fileNames.push(fileName);
                 $scope.files[fileName] = jsonData;
                 $scope.message = "The file has been successfully uploaded";
               });
-              console.log(fileName);
-              console.log(jsonData);
           }
           catch(error) {
             $scope.message = "Invalid .json file";
@@ -57,22 +58,32 @@ angular.module("indexApp", [])
       const create = index.createIndex(obj, fileData);
     };
 
-    $scope.getIndex = (title = null) => {
-      if(title === null) {
-        $scope.$apply(() => {
-          $scope.hidden = false;
-        });
-        $scope.indexed = index.getIndex(title = null);
-        return;
+    $scope.getIndex = (title) => {
+      $scope.indexed = index.getIndex(title);
+      $scope.document = $scope.files[title];
+      $scope.title = title;
+      $scope.showIntro = false;
+      $scope.hideTable = false;
+      $scope.showResult = false;
+      return;
+    };
+
+    $scope.searchIndex = () => {
+      let searchItem = $scope.searchText;
+      let file = $scope.selected;
+
+      if(file === undefined) {
+        $scope.message = "You are searching an unindexed file";
+      } else if (file === "all") {
+        $scope.searchResult = index.searchIndex(searchItem, file = null);
+        $scope.searchTerms = searchItem;
+        $scope.showResult = true;
+        $scope.hideTable = true;
       } else {
-        $scope.indexed = index.getIndex(title);
-        $scope.document = $scope.files[title];
-        $scope.title = title;
-        // write code to disply result
-        
-        console.log($scope.indexed);
-        console.log($scope.document);
-        return;
+        $scope.searchResult = index.searchIndex(searchItem, file);
+        $scope.searchTerms = searchItem;
+        $scope.showResult = true;
+        $scope.hideTable = true;
       }
     };
 

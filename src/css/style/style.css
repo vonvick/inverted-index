@@ -30,14 +30,39 @@ main {
 }
 
 header, main, footer {
-  padding-left: 300px;
+  padding-left: 350px;
 }
 
 #slide-out {
   padding-left: 20px;
+  width: 350px;
 }
 
 .hidden {
   display: none;
   visibility: hidden;
+}
+
+.small-button {
+  padding: 0 0.5rem;
+}
+
+.fix-table {
+  height: 500px;
+  overflow-y: auto;
+}
+
+.fixed-header {
+  table-layout: fixed;
+}
+
+.fixed_header thead tr {
+  display: block;
+  position: relative;
+}
+
+.input-field 
+input[type=search] {
+  padding-left: 0;
+  width: 100%;
 }
