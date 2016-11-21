@@ -31843,22 +31843,16 @@ _angular2.default.module("indexApp", []).controller("InvertedIndexController", [
   $scope.createIndex = function (obj) {
     var fileData = $scope.files[obj];
     var create = index.createIndex(obj, fileData);
-    $scope.showIntro = false;
-    $scope.hideTable = false;
   };
 
-  $scope.getIndex = function () {
-    var title = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-    if (title === null) {
-      $scope.indexed = index.getIndex(title = null);
-      return;
-    } else {
-      $scope.indexed = index.getIndex(title);
-      $scope.document = $scope.files[title];
-      $scope.title = title;
-      return;
-    }
+  $scope.getIndex = function (title) {
+    $scope.indexed = index.getIndex(title);
+    $scope.document = $scope.files[title];
+    $scope.title = title;
+    $scope.showIntro = false;
+    $scope.hideTable = false;
+    $scope.showResult = false;
+    return;
   };
 
   $scope.searchIndex = function () {
