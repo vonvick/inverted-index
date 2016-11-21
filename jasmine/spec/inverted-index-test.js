@@ -79,15 +79,15 @@ describe("Inverted Index", () => {
       let createIndex = invertedIndex.createIndex("books", books);
       let getIndex = invertedIndex.getIndex("books");
       let searchIndex = invertedIndex.searchIndex("and");
-      expect(searchIndex[0].and.books).toEqual([0,1]);
+      expect(searchIndex[0].books.and).toEqual([0,1]);
     });
     it("should return an array of Objects containing the search parameter, the files and their indexes", () => {
       let createIndex = invertedIndex.createIndex("books", books);
       let createIndex2 = invertedIndex.createIndex("books1", books1);
       let getIndex = invertedIndex.getIndex();
       let searchIndex = invertedIndex.searchIndex("and");
-      expect(searchIndex[0].and.books).toEqual([0,1]);
-      expect(searchIndex[0].and.books1).toEqual([0,1]);
+      expect(searchIndex[0].books.and).toEqual([0,1]);
+      expect(searchIndex[1].books1.and).toEqual([0,1]);
     });
     it("should return an array of Objects containing the search parameter in the selected file and its indexes", () => {
       let createIndex = invertedIndex.createIndex("books", books);
@@ -95,9 +95,9 @@ describe("Inverted Index", () => {
       let getIndex = invertedIndex.getIndex();
       let searchIndex = invertedIndex.searchIndex("and", "books");
       let searchIndex2 = invertedIndex.searchIndex("and", "books1");
-      expect(searchIndex[0].and).toEqual([0,1]);
+      expect(searchIndex[0].books.and).toEqual([0,1]);
       expect(Object.keys(searchIndex[0]).length).toBe(1);
-      expect(searchIndex2[0].and).toEqual([0,1]);
+      expect(searchIndex2[0].books1.and).toEqual([0,1]);
       expect(Object.keys(searchIndex2[0]).length).toBe(1);
     });
   });

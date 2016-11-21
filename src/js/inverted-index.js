@@ -111,28 +111,21 @@ class InvertedIndex {
    * @returns {Object}
    */
 
-  _getTermResult(answer, term, name) {
-    let indexFile = this.getIndex(name);
-    if(name === null) {
-      for(let key in indexFile) {
-        if(term in indexFile[key] && answer[term] === undefined) {
-          answer[term] = {};
-          answer[term][key] = indexFile[key][term];
-        } else if(term in indexFile[key] && answer.hasOwnProperty(term)) {
-          answer[term][key] = indexFile[key][term];
-        } else {
-          return "Search text not found";
-        }
-      }
-      return answer;  
-    } else if (indexFile !== undefined) {
-      if(term in this.indexes[name]) {
-        answer[term] = {};
-        answer[term] = this.indexes[name][term];
-        return answer;
-      }
-      return "Search text not found";
-    }
+  _getTermResult(searchFile, terms) {
+    let result = [];
+    let indexTerm = Object.keys(searchFile);
+      indexTerm.forEach((file) => {
+        let files = {};
+        files[file] = {};
+        terms.forEach((term) => {
+          if(searchFile[file].hasOwnProperty(term)) {
+            files[file][term] = {};
+            files[file][term] = searchFile[file][term];
+          }
+        });
+        result.push(files);
+      });
+    return result;
   }
 
 
@@ -149,13 +142,23 @@ class InvertedIndex {
     }
     terms = InvertedIndex.textToArray(terms);
     let result = [];
-    terms.forEach((term) => {
-      let fileResult = {};
-      let answer = this._getTermResult(fileResult, term, name);
-      result.push(answer);
-    });
-    return result;
-   }
+    if(name === null) {
+      let searchFile = this.indexes;
+      result = this._getTermResult(searchFile, terms);
+      return result;
+    } else {
+      let searchFile = this.indexes[name];
+      let file = {};
+      file[name] = {};
+      terms.forEach((term) => {
+        if(term in searchFile) {
+          file[name][term] = searchFile[term];
+        }
+      });
+      result.push(file);
+      return result;
+    }
+  }
 }
 
 module.exports = InvertedIndex;
