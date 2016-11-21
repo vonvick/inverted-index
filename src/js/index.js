@@ -73,7 +73,7 @@ angular.module("indexApp", [])
       let file = $scope.selected;
 
       if(file === undefined) {
-        $scope.message = "You are searching an unindexed file"
+        $scope.message = "You are searching an unindexed file";
       } else if (file === "all") {
         $scope.searchResult = index.searchIndex(searchItem, file = null);
         $scope.searchTerms = searchItem;
