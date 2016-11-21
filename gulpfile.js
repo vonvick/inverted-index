@@ -93,6 +93,12 @@ gulp.task("webpack", function() {
     .pipe(plugins.connect.reload());
 });
 
+gulp.task("testSource", function() {
+  return gulp.src("./src/js/inverted-index.js")
+    .pipe(gulp.dest("./jasmine/src/"))
+    .pipe(plugins.connect.reload());
+});
+
 gulp.task("reloadTest", function() {
   return gulp.src(spec + "spec/build.js")
     .pipe(gulp.dest(out.test.folder + "build.js"))
@@ -124,7 +130,8 @@ gulp.task("watch", function() {
   gulp.watch(src.scripts.all, ["script"]);
   gulp.watch(src.images, ["imagemin"]);
   gulp.watch("./jasmine/spec/inverted-index-test.js", ["reloadTest"]);
+  gulp.watch("./src/js/inverted-index.js", ["testSource"]);
 });
 
-gulp.task("build", ["script", "sass", "css", "html", "imagemin", "reloadTest"]);
+gulp.task("build", ["script", "sass", "css", "html", "imagemin", "reloadTest", "testSource"]);
 gulp.task("default", ["serve", "webpack", "serveTest"]);
