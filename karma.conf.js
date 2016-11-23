@@ -15,8 +15,16 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      "jasmine/src/inverted-index.js",
       "jasmine/spec/bundle.js"
     ],
+
+    customLaunchers: {
+      Chrome_travis_ci: {
+      base: "Chrome",
+        flags: ["--no-sandbox"]
+      }
+    },
 
 
     // list of files to exclude
@@ -27,14 +35,14 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      "src/js/inverted-index.js": ["coverage"]
+      "jasmine/src/inverted-index.js": "coverage"
     },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ["progress", "coverage"],
+    reporters: ["progress", "coverage", "coveralls"],
 
     coverageReporter: {
       type: "lcov",
@@ -60,7 +68,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ["PhantomJS"],
+    browsers: process.env.TRAVIS ? ["Chrome_travis_ci"] : ["Chrome"],
 
 
     // Continuous Integration mode
