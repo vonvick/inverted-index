@@ -1,9 +1,7 @@
 
 // import the angular package and other components
 
-import angular from "angular";
-
-import InvertedIndex from "./inverted-index.js";
+const angular = require("angular")
 
 angular.module("indexApp", [])
   .controller("InvertedIndexController", ["$scope", ($scope) => {

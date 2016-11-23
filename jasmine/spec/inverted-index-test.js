@@ -1,4 +1,3 @@
-var InvertedIndex = require("../src/inverted-index.js");
 var jsonfile = require("../books");
 var jsonfile1 = require("../books1");
 
