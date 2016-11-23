@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/andela-vnwaiwu/inverted-index.svg?branch=coveralls)](https://travis-ci.org/andela-vnwaiwu/inverted-index)
-[![Coverage Status](https://coveralls.io/repos/github/andela-vnwaiwu/inverted-index/badge.svg)](https://coveralls.io/github/andela-vnwaiwu/inverted-index)
+[![Build Status](https://travis-ci.org/andela-vnwaiwu/inverted-index.svg?branch=develop)](https://travis-ci.org/andela-vnwaiwu/inverted-index)
+[![Coverage Status](https://coveralls.io/repos/github/andela-vnwaiwu/inverted-index/badge.svg?branch=add-test-to-code-coverage)](https://coveralls.io/github/andela-vnwaiwu/inverted-index?branch=add-test-to-code-coverage)
 
 # Inverted Index
 
