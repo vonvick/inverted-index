@@ -66,21 +66,24 @@ class InvertedIndex {
    * @returns {Array} 
    */
   createIndex(name, fileContent) {
-    if(!this.readBookData) {
+    if(!this.readBookData(fileContent)) {
       return false;
-    } 
-    const indexArray = [];
-    fileContent.forEach((item) => {
-      let text = item.title + " " + item.text;
-      let textArray = InvertedIndex.textToArray(text);
-      indexArray.push(textArray);
-    });
+    } else {
+      const indexArray = [];
+      fileContent.forEach((item) => {
+        let text = item.title + " " + item.text;
+        let textArray = InvertedIndex.textToArray(text);
+        indexArray.push(textArray);
+      });
     
-    if(!this.indexes[name]) {
-      this.indexes[name] = {};
-      for(let element in indexArray) {
-        let textIndex = indexArray[element];
-        this._sortIndex(name, textIndex, element);
+      if(!this.indexes[name]) {
+        this.indexes[name] = {};
+        for(let element in indexArray) {
+          let textIndex = indexArray[element];
+          this._sortIndex(name, textIndex, element);
+        }
+      } else {
+        return "You have uploaded this file before"
       }
     }
   }
@@ -91,15 +94,14 @@ class InvertedIndex {
    * file 
    * @returns {Object} 
    */
-  getIndex(name = null) {
+  getIndex(name) {
+    name = name || null;
     if(Object.keys(this.indexes).length < 1 ) {
       return {};
     } else if(name === null) {
       return this.indexes;
     } else {
-      if(this.indexes[name]) {
-        return this.indexes[name];
-      }
+      return this.indexes[name];
     }
   }
 
@@ -121,6 +123,8 @@ class InvertedIndex {
           if(searchFile[file].hasOwnProperty(term)) {
             files[file][term] = {};
             files[file][term] = searchFile[file][term];
+          } else {
+            files[file][term] = null;
           }
         });
         result.push(files);
@@ -136,12 +140,10 @@ class InvertedIndex {
    * @returns {Array}
    */
    
-  searchIndex(terms, name = null) {
-    if (name && !this.indexes.hasOwnProperty(name)) {
-      return "No such File";
-    }
+  searchIndex(terms, name) {
     terms = InvertedIndex.textToArray(terms);
     let result = [];
+    name = name || null;
     if(name === null) {
       let searchFile = this.indexes;
       result = this._getTermResult(searchFile, terms);
@@ -153,6 +155,8 @@ class InvertedIndex {
       terms.forEach((term) => {
         if(term in searchFile) {
           file[name][term] = searchFile[term];
+        } else {
+          file[name][term] = null;
         }
       });
       result.push(file);
@@ -160,5 +164,3 @@ class InvertedIndex {
     }
   }
 }
-
-// module.exports = InvertedIndex;

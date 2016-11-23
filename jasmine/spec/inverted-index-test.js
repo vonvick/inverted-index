@@ -1,10 +1,12 @@
 var jsonfile = require("../books");
 var jsonfile1 = require("../books1");
+var emptyJson = require("../empty")
 
 describe("Inverted Index", () => {
   const invertedIndex = new InvertedIndex();
   let books = jsonfile;
   let books1 = [];
+  let empty = emptyJson;
 
   beforeEach(() => {
     books1 = jsonfile1;
@@ -47,6 +49,15 @@ describe("Inverted Index", () => {
       expect(invertedIndex.indexes.books.and).toEqual([0,1]);
       expect(invertedIndex.indexes.books.of).toEqual([0,1]);
     });
+    it("should return false if the file Content is Empty", () => {
+      let createIndex = invertedIndex.createIndex("empty", empty);
+      expect(createIndex).toBe(false);
+    });
+    it("should not create the index again if the file has been uploaded before", () => {
+      let createIndex = invertedIndex.createIndex("books", books);
+      let createIndex2 = invertedIndex.createIndex("books", books);
+      expect(Object.keys(invertedIndex.indexes).length).toBe(1);
+    });
   });
 
   describe("Get Index", () => {
@@ -79,6 +90,12 @@ describe("Inverted Index", () => {
       let getIndex = invertedIndex.getIndex("books");
       let searchIndex = invertedIndex.searchIndex("and");
       expect(searchIndex[0].books.and).toEqual([0,1]);
+    });
+    it("should return null for a word not found in the file", () => {
+      let createIndex = invertedIndex.createIndex("books", books);
+      let getIndex = invertedIndex.getIndex("books");
+      let searchIndex = invertedIndex.searchIndex("because");
+      expect(searchIndex[0].books.because).toBe(null);
     });
     it("should return an array of Objects containing the search parameter, the files and their indexes", () => {
       let createIndex = invertedIndex.createIndex("books", books);
