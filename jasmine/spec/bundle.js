@@ -48,11 +48,13 @@
 	
 	var jsonfile = __webpack_require__(1);
 	var jsonfile1 = __webpack_require__(2);
+	var emptyJson = __webpack_require__(3);
 	
 	describe("Inverted Index", function () {
 	  var invertedIndex = new InvertedIndex();
 	  var books = jsonfile;
 	  var books1 = [];
+	  var empty = emptyJson;
 	
 	  beforeEach(function () {
 	    books1 = jsonfile1;
@@ -95,6 +97,15 @@
 	      expect(invertedIndex.indexes.books.and).toEqual([0, 1]);
 	      expect(invertedIndex.indexes.books.of).toEqual([0, 1]);
 	    });
+	    it("should return false if the file Content is Empty", function () {
+	      var createIndex = invertedIndex.createIndex("empty", empty);
+	      expect(createIndex).toBe(false);
+	    });
+	    it("should not create the index again if the file has been uploaded before", function () {
+	      var createIndex = invertedIndex.createIndex("books", books);
+	      var createIndex2 = invertedIndex.createIndex("books", books);
+	      expect(Object.keys(invertedIndex.indexes).length).toBe(1);
+	    });
 	  });
 	
 	  describe("Get Index", function () {
@@ -127,6 +138,12 @@
 	      var getIndex = invertedIndex.getIndex("books");
 	      var searchIndex = invertedIndex.searchIndex("and");
 	      expect(searchIndex[0].books.and).toEqual([0, 1]);
+	    });
+	    it("should return null for a word not found in the file", function () {
+	      var createIndex = invertedIndex.createIndex("books", books);
+	      var getIndex = invertedIndex.getIndex("books");
+	      var searchIndex = invertedIndex.searchIndex("because");
+	      expect(searchIndex[0].books.because).toBe(null);
 	    });
 	    it("should return an array of Objects containing the search parameter, the files and their indexes", function () {
 	      var createIndex = invertedIndex.createIndex("books", books);
@@ -179,6 +196,12 @@
 			"text": "A wizard comes to town with a powerful ring and falls into a rabbit hole."
 		}
 	];
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = [];
 
 /***/ }
 /******/ ]);
