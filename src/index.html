@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="indexApp">
+  <head>
+    <meta charset="UTF-8">
+    <title>Inverted Index</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/materialize.css">
+    <link rel="stylesheet" href="css/style/style.css">
+
+    <script type="text/javascript" src="libs/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="libs/materialize.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>-->
+    
+    <script type="text/javascript" src="js/inverted-index.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/helpers.js"></script>
+  </head>
+  <body ng-controller="InvertedIndexController">
+    <header>
+      <nav class="cyan">
+        <div class="container">
+          <div class="nav-wrapper">
+            <a href="#" class="brand-logo">INVERTED INDEX</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <ul id="slide-out" class="side-nav fixed">
+        <li class="brand-logo"><img src="img/logo.jpg" height="150" width="250" class="center"/></li>
+        <li class="search">
+          <div class="nav-wrapper card">
+            <form ng-submit="searchIndex()">
+              <div class="row">
+                <div class="input-field col m8">
+                  <input id="search" ng-model="searchText" type="search" required placeholder="Enter text to search here">
+                </div>
+                <div class="input-field col m4">
+                  <select class="browser-default" ng-model="selected">
+                    <option value="" disabled selected>Choose file to search</option>
+                    <option ng-repeat="file in fileNames" ng-model="selected" value="{{file}}">{{file}}</option>
+                    <option ng-if="fileNames.length > 1" ng-model="selected" value="all">All files</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </li>
+        <li>
+          <a class="waves-effect waves-light btn" href="#modal1">Add a File</a>
+          <p class="error" ng-model="message">{{message}}</p>
+        </li>
+        <li ng-repeat="file in fileNames">
+          {{file}} <button class="waves-light waves-effect small-button btn orange hide-intro" ng-click="createIndex(file)">create index </button>
+          <button class="waves-light waves-effect btn small-button green" ng-click="getIndex(file)">get index </button>
+        </li>
+      </ul>
+      <div class="container">
+        <div class="intro" ng-show="showIntro">
+          <h3 class="center-align">INVERTED INDEX</h3>
+          <p class="center-align">
+            This application makes use of inverted index a type of elastic search algorithm
+            that makes it possible to perform fast full-text search of documents. It get a list of all words
+            in a docuemnt and indexes them by storing the word and where they appear in the document.
+          </p>
+          <div class="row">
+            <div class="col s12">
+              <h5>Instructions</h5>
+              <p>
+                Follow the instructions written below to use the application
+              </p>
+              <ol>
+                <li>create a ".json" file that is an array of object in the following format:
+                  <ul>
+                    <li><img class="responsive-img" src="img/how-to.png"/></li>
+                  </ul>
+                </li>
+                <li>Upload the .json file you wish have created and wish to index.</li>
+                <li>The files are supposed to be uploaded one after the other(asynchronously).</li>
+                <li>After successful upload of file(s), You can click the create index button  for each uploaded file.
+                  this creates an index of the clicked file.</li>
+                <li>You can search for a word or words by entering a word in the search box provided above and click the search button to search.</li>
+              </ol> 
+            </div>
+          </div>
+        </div>
+        <div class="tokens" ng-hide="hideTable">
+          <div class="row">
+            <div class="fix-table col m12">
+              <table class="bordered striped centered responsive-table fixed-header">
+                <thead>
+                  <tr>
+                    <th colspan="1">Tokens</th>
+                    <th colspan="{{document.length}}">{{title}}</th>
+                  </tr>
+                  <tr>
+                    <th>Items</th>
+                    <th ng-repeat="j in document | filter:q as results">Doc{{$index + 1}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="(key, value) in indexed">
+                    <td>{{key}}</td>
+                    <td ng-repeat="i in document">
+                      <span ng-if="value.includes($index)">
+                        <i class="material-icons">done</i>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="search-result" ng-show="showResult">
+          <h4>Showing search result(s) for "{{searchTerms}}"</h4>
+          <div class="result-box" ng-repeat="result in searchResult">
+            <div ng-repeat="(key, value) in result">
+              <h5>Result in {{key}}</h5>
+              <table class="bordered striped centered responsive-table fixed-header">
+                <thead>
+                  <tr>
+                    <th colspan="1">Tokens</th>
+                    <th colspan="{{files[key].length}}">{{key}}</th>
+                  </tr>
+                  <tr>
+                    <th>Items</th>
+                    <th ng-repeat="doc in files[key]">Doc{{$index + 1}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="(term, answer ) in value">
+                    <td>{{term}}</td>
+                    <td ng-repeat="i in files[key]">
+                      <span ng-if="answer.includes($index)">
+                        <i class="material-icons">done</i>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Modal Structure -->
+        <div id="modal1" class="modal">
+          <div class="modal-content">
+            <form action="#" id="upload-form">
+              <div class="file-field input-field">
+                <div class="btn">
+                  <span>File</span>
+                  <input id="json-file" type="file">
+                </div>
+                <div class="file-path-wrapper">
+                  <input class="file-path validate" type="text">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <a class=" modal-action modal-close waves-effect waves-light btn green" ng-click="uploadFile()">upload</a>
+          </div>
+        </div><!-- Modal Structure -->
+        <div class="info" ng-hide="hideTable">
+          <div class="row">
+            <p>Your feedback is highly appreciated. Send your thoughts and comments to:
+              <a href="mailto:victor.nwaiwu@andela.com">email</a>
+            </p>
+          </div>
+        </div>
+      </div> <!--container div --> 
+    </main>
+    <footer class="page-footer cyan darken-2">
+      <div class="footer-copyright">
+        <div class="container">
+          © 2016 Copyright Victor Nwaiwu
+          <a class="grey-text text-lighten-4 right" href="#!">Andela D0 first checkpoint</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

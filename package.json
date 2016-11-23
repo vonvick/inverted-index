@@ -1,0 +1,69 @@
+{
+  "name": "inverted-index",
+  "version": "1.0.0",
+  "description": "An application that takes a JSON array of text objects and creates an index from the array. The index allows a user to search for text blocks in the array that contain a specified collection of words.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node node_modules/gulp-cli/bin/gulp",
+    "test": "node_modules/karma/bin/karma start karma.conf.js --single-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vonvick/inverted-index.git"
+  },
+  "keywords": [
+    "inverted",
+    "Index",
+    "ES6",
+    "angular"
+  ],
+  "author": "Victor Nwaiwu <vonvikky@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vonvick/inverted-index/issues"
+  },
+  "homepage": "https://github.com/vonvick/inverted-index#readme",
+  "devDependencies": {
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.8",
+    "babel-preset-es2015": "^6.18.0",
+    "babelify": "^7.3.0",
+    "browser-sync": "^2.18.1",
+    "browserify": "^9.0.8",
+    "coveralls": "^2.11.15",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-browserify": "^0.5.1",
+    "gulp-clean-css": "^2.0.13",
+    "gulp-connect": "^5.0.0",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-jasmine-livereload-task": "^0.10.1",
+    "gulp-jshint": "^2.0.2",
+    "gulp-load-plugins": "^1.4.0",
+    "gulp-sass": "^2.3.2",
+    "gulp-shell": "^0.5.2",
+    "jasmine": "^2.5.2",
+    "jasmine-core": "^2.5.2",
+    "jshint": "^2.9.4",
+    "json-loader": "^0.5.4",
+    "karma": "^1.3.0",
+    "karma-babel-preprocessor": "^6.0.1",
+    "karma-browserify": "^5.1.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-cli": "^1.0.1",
+    "karma-coverage": "^1.1.1",
+    "karma-coveralls": "^1.1.2",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-requirejs": "^1.1.0",
+    "requirejs": "^2.3.2",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "webpack": "^1.13.3",
+    "webpack-stream": "^3.2.0"
+  },
+  "dependencies": {
+    "angular": "^1.5.8"
+  }
+}
