@@ -43,11 +43,30 @@ gulp.task("default", function() {
 
 });
 
-gulp.task("script", function () {
-  gulp.src("./src/js/*.js")
-    .pipe(plugins.browserify({
-      transform: ["babelify"],
-    }))
+gulp.task("script", function() {
+  return gulp.src(src.scripts.app)
+  .pipe(webpack({
+    output: {
+      filename: "index.js"
+    },
+    watch: false,
+    module: {
+      loaders: [
+        { loader: "babel-loader",
+          test: /\.js$/,
+          exclude: /node_modules/,
+          query: {
+            presets: "es2015" 
+          }
+        }
+      ],
+    },
+  }))
+  .pipe(gulp.dest(out.scripts.folder));
+});
+
+gulp.task("source", function () {
+  return gulp.src("./src/js/inverted-index.js")
     .pipe(gulp.dest("./build/js"))
     .pipe(plugins.connect.reload());
 });
@@ -131,7 +150,8 @@ gulp.task("watch", function() {
   gulp.watch(src.images, ["imagemin"]);
   gulp.watch("./jasmine/spec/inverted-index-test.js", ["reloadTest"]);
   gulp.watch("./src/js/inverted-index.js", ["testSource"]);
+  gulp.watch("./src/js/inverted-index.js", ["source"])
 });
 
-gulp.task("build", ["script", "sass", "css", "html", "imagemin", "reloadTest", "testSource"]);
+gulp.task("build", ["script", "source", "sass", "css", "html", "imagemin", "reloadTest", "testSource"]);
 gulp.task("default", ["serve", "webpack", "serveTest"]);
