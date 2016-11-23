@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# inverted-index
-=======
 [![Build Status](https://travis-ci.org/andela-vnwaiwu/inverted-index.svg?branch=coveralls)](https://travis-ci.org/andela-vnwaiwu/inverted-index)
 [![Coverage Status](https://coveralls.io/repos/github/andela-vnwaiwu/inverted-index/badge.svg)](https://coveralls.io/github/andela-vnwaiwu/inverted-index)
 
@@ -27,4 +24,3 @@ all files and one file.
 7. Jasmine
 8. Coveralls
 9. JSHint
->>>>>>> 281f874ff5e318e19953be1fa623631d67a8c66b

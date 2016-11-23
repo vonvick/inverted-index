@@ -161,4 +161,4 @@ class InvertedIndex {
   }
 }
 
-module.exports = InvertedIndex;
+// module.exports = InvertedIndex;
