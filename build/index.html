@@ -49,7 +49,8 @@
         </li>
         <li>
           <a class="waves-effect waves-light btn" href="#modal1">Add a File</a>
-          <p class="error" ng-model="message">{{message}}</p>
+          <p class="error" ng-model="message">{{error}}</p>
+          <p class="success" ng-model="message">{{success}}</p>
         </li>
         <li ng-repeat="file in fileNames">
           {{file}} <button class="waves-light waves-effect small-button btn orange hide-intro" ng-click="createIndex(file)">create index </button>

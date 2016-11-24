@@ -57,18 +57,19 @@
 
 	  $scope.files = {};
 	  $scope.fileNames = [];
-	  $scope.message = "";
 	  $scope.searchText = "";
 	  $scope.showIntro = true;
 	  $scope.hideTable = true;
 	  $scope.showResult = false;
 
 	  $scope.uploadFile = function () {
+	    $scope.error = "";
+	    $scope.success = "";
 	    var file = document.forms["upload-form"]["json-file"].files[0];
 	    var fileName = file.name.replace(/\s+/, "");
 	    if (file) {
 	      if (!fileName.match(/\.json$/i)) {
-	        $scope.message = "Invalid file format";
+	        $scope.error = "Invalid file format";
 	        return;
 	      }
 	      var reader = new FileReader();
@@ -78,13 +79,22 @@
 	            var jsonData = JSON.parse(evt.target.result);
 	            if (jsonData.find(findWrongFormat)) {
 	              $scope.$apply(function () {
-	                $scope.message = "The .json file did not follow " + "the required format";
+	                $scope.error = "The .json file did not follow " + "the required format";
 	              });
 	              return {
 	                v: void 0
 	              };
 	            } else if ($scope.fileNames.includes(fileName)) {
-	              $scope.message = "The file has been uploaded before";
+	              $scope.$apply(function () {
+	                $scope.error = "The file has been uploaded before";
+	              });
+	              return {
+	                v: void 0
+	              };
+	            } else if (jsonData.length < 1 || Array.isArray(jsonData === false)) {
+	              $scope.$apply(function () {
+	                $scope.error = "This file is empty or not an Array of object";
+	              });
 	              return {
 	                v: void 0
 	              };
@@ -92,13 +102,15 @@
 	            $scope.$apply(function () {
 	              $scope.fileNames.push(fileName);
 	              $scope.files[fileName] = jsonData;
-	              $scope.message = "The file has been successfully uploaded";
+	              $scope.success = "The file has been successfully uploaded";
 	            });
 	          }();
 
 	          if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
 	        } catch (error) {
-	          $scope.message = "Invalid .json file";
+	          $scope.$apply(function () {
+	            $scope.error = "Invalid .json file";
+	          });
 	        }
 	      };
 	      reader.readAsBinaryString(file);
@@ -125,9 +137,10 @@
 	    var file = $scope.selected;
 
 	    if (file === undefined) {
-	      $scope.message = "You are searching an unindexed file";
+	      $scope.success = "";
+	      $scope.error = "You are searching an unindexed file";
 	    } else if (file === "all") {
-	      $scope.searchResult = index.searchIndex(searchItem, file = null);
+	      $scope.searchResult = index.searchIndex(searchItem, null);
 	      $scope.searchTerms = searchItem;
 	      $scope.showResult = true;
 	      $scope.hideTable = true;
