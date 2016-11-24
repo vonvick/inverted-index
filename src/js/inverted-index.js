@@ -49,6 +49,8 @@ class InvertedIndex {
   /**
    * reads the content of a json file and returns false if the file is empty or 
    * returns true if there are documents in the file.
+   * @param {Array} book the content of the book
+   * @returns {boolean} returns a boolean
    * 
    */
   readBookData(book) {
@@ -62,29 +64,30 @@ class InvertedIndex {
   /**
    * @function takes a file path as argument and read the contents of the file 
    * @param {string} name the name of the file
-   * @param {Array} content the content of the file
-   * @returns {Array} 
+   * @param {array} content the content of the file
+   * @returns {object} 
    */
   createIndex(name, fileContent) {
     if(!this.readBookData(fileContent)) {
       return false;
-    } else {
-      const indexArray = [];
-      fileContent.forEach((item) => {
-        let text = item.title + " " + item.text;
+    } 
+    const indexArray = [];
+    for(let i = 0; i < fileContent.length; i++) {
+      if(fileContent[i].title && fileContent[i].text) {
+        let text = `${fileContent[i].title} ${fileContent[i].text}`;
         let textArray = InvertedIndex.textToArray(text);
         indexArray.push(textArray);
-      });
-    
-      if(!this.indexes[name]) {
-        this.indexes[name] = {};
-        for(let element in indexArray) {
-          let textIndex = indexArray[element];
-          this._sortIndex(name, textIndex, element);
-        }
-      } else {
-        return "You have uploaded this file before"
       }
+    }
+  
+    if(!this.indexes[name] && indexArray.length > 0) {
+      this.indexes[name] = {};
+      for(let element in indexArray) {
+        let textIndex = indexArray[element];
+        this._sortIndex(name, textIndex, element);
+      }
+    } else {
+      return "You have uploaded this file before";
     }
   }
 
@@ -92,7 +95,8 @@ class InvertedIndex {
   /**
    * @function takes an uploaded file as argument and read the contents of the
    * file 
-   * @returns {Object} 
+   * @param {string} name the name of the file to get the index for
+   * @returns {object} 
    */
   getIndex(name) {
     name = name || null;
@@ -110,25 +114,23 @@ class InvertedIndex {
    * @function return an object that contains the index of the search
    * word and the files they can be found. 
    * @param {string} terms 
-   * @returns {Object}
+   * @returns {object}
    */
 
   _getTermResult(searchFile, terms) {
-    let result = [];
-    let indexTerm = Object.keys(searchFile);
-      indexTerm.forEach((file) => {
-        let files = {};
-        files[file] = {};
-        terms.forEach((term) => {
-          if(searchFile[file].hasOwnProperty(term)) {
-            files[file][term] = {};
-            files[file][term] = searchFile[file][term];
+    const result = [];
+    for(let key in searchFile) {
+      const files = {};
+      files[key] = {};
+        for(let j = 0; j < terms.length; j++){
+          if(searchFile[key].hasOwnProperty(terms[j])) {
+            files[key][terms[j]] = searchFile[key][terms[j]];
           } else {
-            files[file][term] = null;
+            files[key][terms[j]] = null;
           }
-        });
-        result.push(files);
-      });
+        }
+      result.push(files);
+    }
     return result;
   }
 
@@ -137,13 +139,12 @@ class InvertedIndex {
    * @function takes an array of arguments and returns an array of numbers that 
    * represents the index of the words
    * @param {string} terms 
-   * @returns {Array}
+   * @returns {array}
    */
    
   searchIndex(terms, name) {
     terms = InvertedIndex.textToArray(terms);
     let result = [];
-    name = name || null;
     if(name === null) {
       let searchFile = this.indexes;
       result = this._getTermResult(searchFile, terms);
@@ -152,13 +153,13 @@ class InvertedIndex {
       let searchFile = this.indexes[name];
       let file = {};
       file[name] = {};
-      terms.forEach((term) => {
-        if(term in searchFile) {
-          file[name][term] = searchFile[term];
+      for(let i = 0; i < terms.length; i++) {
+        if(terms[i] in searchFile) {
+          file[name][terms[i]] = searchFile[terms[i]];
         } else {
-          file[name][term] = null;
+          file[name][terms[i]] = null;
         }
-      });
+      }
       result.push(file);
       return result;
     }

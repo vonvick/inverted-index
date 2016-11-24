@@ -29,6 +29,11 @@ main {
   color: red;
 }
 
+.success {
+  font-size: 10px;
+  color: limegreen;
+}
+
 header, main, footer {
   padding-left: 350px;
 }

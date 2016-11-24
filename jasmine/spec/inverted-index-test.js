@@ -5,12 +5,8 @@ var emptyJson = require("../empty")
 describe("Inverted Index", () => {
   const invertedIndex = new InvertedIndex();
   let books = jsonfile;
-  let books1 = [];
+  let books1 = jsonfile1;
   let empty = emptyJson;
-
-  beforeEach(() => {
-    books1 = jsonfile1;
-  });
 
   afterEach(() => {
     invertedIndex.indexes = {};
@@ -88,22 +84,32 @@ describe("Inverted Index", () => {
     it("should return an array of the index of the words in the file and the word", () => {
       let createIndex = invertedIndex.createIndex("books", books);
       let getIndex = invertedIndex.getIndex("books");
-      let searchIndex = invertedIndex.searchIndex("and");
+      let searchIndex = invertedIndex.searchIndex("and", "books");
       expect(searchIndex[0].books.and).toEqual([0,1]);
     });
     it("should return null for a word not found in the file", () => {
       let createIndex = invertedIndex.createIndex("books", books);
       let getIndex = invertedIndex.getIndex("books");
-      let searchIndex = invertedIndex.searchIndex("because");
+      let searchIndex = invertedIndex.searchIndex("because", "books");
       expect(searchIndex[0].books.because).toBe(null);
     });
     it("should return an array of Objects containing the search parameter, the files and their indexes", () => {
       let createIndex = invertedIndex.createIndex("books", books);
       let createIndex2 = invertedIndex.createIndex("books1", books1);
       let getIndex = invertedIndex.getIndex();
-      let searchIndex = invertedIndex.searchIndex("and");
+      let searchIndex = invertedIndex.searchIndex("and", null);
       expect(searchIndex[0].books.and).toEqual([0,1]);
       expect(searchIndex[1].books1.and).toEqual([0,1]);
+    });
+    it("should return null if a word is not found in a file", () => {
+      let createIndex = invertedIndex.createIndex("books", books);
+      let createIndex2 = invertedIndex.createIndex("books1", books1);
+      let getIndex = invertedIndex.getIndex();
+      let searchIndex = invertedIndex.searchIndex("and because", null);
+      expect(searchIndex[0].books.and).toEqual([0,1]);
+      expect(searchIndex[1].books1.and).toEqual([0,1]);
+      expect(searchIndex[0].books.because).toBe(null);
+      expect(searchIndex[1].books1.because).toBe(null);
     });
     it("should return an array of Objects containing the search parameter in the selected file and its indexes", () => {
       let createIndex = invertedIndex.createIndex("books", books);
