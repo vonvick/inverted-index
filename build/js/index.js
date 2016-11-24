@@ -77,7 +77,6 @@
 	        try {
 	          var _ret = function () {
 	            var jsonData = JSON.parse(evt.target.result);
-	            console.log(jsonData);
 	            if (jsonData.find(findWrongFormat)) {
 	              $scope.$apply(function () {
 	                $scope.error = "The .json file did not follow " + "the required format";
@@ -136,14 +135,12 @@
 	  $scope.searchIndex = function () {
 	    var searchItem = $scope.searchText;
 	    var file = $scope.selected;
-	    console.log(file);
 
 	    if (file === undefined) {
 	      $scope.success = "";
 	      $scope.error = "You are searching an unindexed file";
 	    } else if (file === "all") {
 	      $scope.searchResult = index.searchIndex(searchItem, null);
-	      console.log($scope.searchResult);
 	      $scope.searchTerms = searchItem;
 	      $scope.showResult = true;
 	      $scope.hideTable = true;

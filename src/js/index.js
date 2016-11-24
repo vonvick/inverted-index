@@ -28,7 +28,6 @@ angular.module("indexApp", [])
         reader.onload = (evt) => {
           try {
             const jsonData = JSON.parse(evt.target.result);
-            console.log(jsonData);
               if(jsonData.find(findWrongFormat)){
                 $scope.$apply(() => {
                   $scope.error = "The .json file did not follow " +
@@ -80,14 +79,12 @@ angular.module("indexApp", [])
     $scope.searchIndex = () => {
       let searchItem = $scope.searchText;
       let file = $scope.selected;
-      console.log(file)
 
       if(file === undefined) {
         $scope.success = "";
         $scope.error = "You are searching an unindexed file";
       } else if (file === "all") {
         $scope.searchResult = index.searchIndex(searchItem, null);
-        console.log($scope.searchResult);
         $scope.searchTerms = searchItem;
         $scope.showResult = true;
         $scope.hideTable = true;
