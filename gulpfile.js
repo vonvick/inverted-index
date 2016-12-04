@@ -1,3 +1,4 @@
+require('dotenv').config();
 const gulp = require('gulp');
 const webpack = require('webpack-stream');
 const eslint = require('gulp-eslint');
@@ -103,7 +104,7 @@ gulp.task('reloadTest', () => gulp.src(`${spec}spec/build.js`)
 gulp.task('serve', ['build', 'watch'], () => {
   plugins.connect.server({
     root: build,
-    port: 8080,
+    port: process.env.PORT || 8080,
     livereload: true,
     fallback: `${build}index.html`
   });
