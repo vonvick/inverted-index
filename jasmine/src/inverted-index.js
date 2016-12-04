@@ -1,4 +1,4 @@
-/* eslint class-methods-use-this: "off"*/
+/* eslint class-methods-use-this: "error"*/
 /* eslint-env es6*/
 
 /**
