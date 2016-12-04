@@ -1,0 +1,30 @@
+---
+engines:
+  csslint:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+ratings:
+  paths:
+  - "**.css"
+  - "**.js"
+exclude_paths:
+	- "coverage/"
+	- "/build/"
+	- "/node_modules/"
+	- "/jasmine/spec/bundle.js"
+	- "/jasmine/spec/bundle.js.map"
+	- "/jasmine/lib/"
+	- "karma.conf.js"
+	- "/src/libs/"
+	- "webpack.config.js"
+	- "LICENSE"
+	- "README.md"
+	- "package.json"
