@@ -44,32 +44,40 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+	/* global InvertedIndex */
 	// import the angular package and other components
 
 	var angular = __webpack_require__(1);
 
-	angular.module("indexApp", []).controller("InvertedIndexController", ["$scope", function ($scope) {
+	angular.module('indexApp', []).controller('InvertedIndexController', ['$scope', function ($scope) {
 	  var index = new InvertedIndex();
 
 	  $scope.files = {};
 	  $scope.fileNames = [];
-	  $scope.searchText = "";
+	  $scope.searchText = '';
 	  $scope.showIntro = true;
 	  $scope.hideTable = true;
 	  $scope.showResult = false;
 
+	  function findWrongFormat(element) {
+	    if (!{}.hasOwnProperty.call(element, 'title') || !{}.hasOwnProperty.call(element, 'text')) {
+	      return true;
+	    }
+	    return false;
+	  }
+
 	  $scope.uploadFile = function () {
-	    $scope.error = "";
-	    $scope.success = "";
-	    var file = document.forms["upload-form"]["json-file"].files[0];
-	    var fileName = file.name.replace(/\s+/, "");
+	    $scope.error = '';
+	    $scope.success = '';
+	    var file = document.forms['upload-form']['json-file'].files[0];
+	    var fileName = file.name.replace(/\s+/, '');
 	    if (file) {
 	      if (!fileName.match(/\.json$/i)) {
-	        $scope.error = "Invalid file format";
+	        $scope.error = 'Invalid file format';
 	        return;
 	      }
 	      var reader = new FileReader();
@@ -79,21 +87,21 @@
 	            var jsonData = JSON.parse(evt.target.result);
 	            if (jsonData.find(findWrongFormat)) {
 	              $scope.$apply(function () {
-	                $scope.error = "The .json file did not follow " + "the required format";
+	                $scope.error = 'The .json file did not follow\n                the required format';
 	              });
 	              return {
 	                v: void 0
 	              };
 	            } else if ($scope.fileNames.includes(fileName)) {
 	              $scope.$apply(function () {
-	                $scope.error = "The file has been uploaded before";
+	                $scope.error = 'The file has been uploaded before';
 	              });
 	              return {
 	                v: void 0
 	              };
 	            } else if (jsonData.length < 1 || Array.isArray(jsonData === false)) {
 	              $scope.$apply(function () {
-	                $scope.error = "This file is empty or not an Array of object";
+	                $scope.error = 'This file is empty or not an Array of object';
 	              });
 	              return {
 	                v: void 0
@@ -102,14 +110,14 @@
 	            $scope.$apply(function () {
 	              $scope.fileNames.push(fileName);
 	              $scope.files[fileName] = jsonData;
-	              $scope.success = "The file has been successfully uploaded";
+	              $scope.success = 'The file has been successfully uploaded';
 	            });
 	          }();
 
-	          if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+	          if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 	        } catch (error) {
 	          $scope.$apply(function () {
-	            $scope.error = "Invalid .json file";
+	            $scope.error = 'Invalid .json file';
 	          });
 	        }
 	      };
@@ -119,7 +127,7 @@
 
 	  $scope.createIndex = function (obj) {
 	    var fileData = $scope.files[obj];
-	    var create = index.createIndex(obj, fileData);
+	    index.createIndex(obj, fileData);
 	  };
 
 	  $scope.getIndex = function (title) {
@@ -129,7 +137,6 @@
 	    $scope.showIntro = false;
 	    $scope.hideTable = false;
 	    $scope.showResult = false;
-	    return;
 	  };
 
 	  $scope.searchIndex = function () {
@@ -137,10 +144,10 @@
 	    var file = $scope.selected;
 
 	    if (file === undefined) {
-	      $scope.success = "";
-	      $scope.error = "You are searching an unindexed file";
-	    } else if (file === "all") {
-	      $scope.searchResult = index.searchIndex(searchItem, null);
+	      $scope.success = '';
+	      $scope.error = 'You are searching an unindexed file';
+	    } else if (file === 'all') {
+	      $scope.searchResult = index.searchIndex(searchItem, file);
 	      $scope.searchTerms = searchItem;
 	      $scope.showResult = true;
 	      $scope.hideTable = true;
@@ -151,13 +158,6 @@
 	      $scope.hideTable = true;
 	    }
 	  };
-
-	  function findWrongFormat(element) {
-	    if (!element.hasOwnProperty("title") || !element.hasOwnProperty("text")) {
-	      return true;
-	    }
-	    return false;
-	  }
 	}]);
 
 /***/ },

@@ -5,24 +5,24 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: "",
+    basePath: '',
 
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ["jasmine"],
+    frameworks: ['jasmine'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      "jasmine/src/inverted-index.js",
-      "jasmine/spec/bundle.js"
+      'jasmine/src/inverted-index.js',
+      'jasmine/spec/bundle.js'
     ],
 
     customLaunchers: {
       Chrome_travis_ci: {
-      base: "Chrome",
-        flags: ["--no-sandbox"]
+      base: 'Chrome',
+        flags: ['--no-sandbox']
       }
     },
 
@@ -35,18 +35,18 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      "jasmine/src/inverted-index.js": "coverage"
+      "jasmine/src/inverted-index.js": 'coverage'
     },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ["progress", "coverage", "coveralls"],
+    reporters: ['progress', 'coverage', 'coveralls'],
 
     coverageReporter: {
-      type: "lcov",
-      dir: "coverage/"
+      type: 'lcov',
+      dir: 'coverage/'
     },
 
     // web server port
@@ -68,7 +68,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: process.env.TRAVIS ? ["Chrome_travis_ci"] : ["Chrome"],
+    browsers: process.env.TRAVIS ? ['Chrome_travis_ci'] : ['Chrome'],
 
 
     // Continuous Integration mode
