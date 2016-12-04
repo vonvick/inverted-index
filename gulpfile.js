@@ -63,43 +63,43 @@ gulp.task('script', () => gulp.src(src.scripts.app)
   .pipe(gulp.dest(out.scripts.folder)));
 
 gulp.task('source', () => gulp.src('./src/js/inverted-index.js')
-    .pipe(gulp.dest('./build/js'))
-    .pipe(plugins.connect.reload()));
+  .pipe(gulp.dest('./build/js'))
+  .pipe(plugins.connect.reload()));
 
 gulp.task('sass', () => gulp.src(src.sass)
-    .pipe(plugins.sass())
-    .pipe(gulp.dest(out.css)));
+  .pipe(plugins.sass())
+  .pipe(gulp.dest(out.css)));
 
 gulp.task('css', () => gulp.src(src.css)
-    .pipe(cleanCSS())
-    .pipe(gulp.dest(out.customcss))
-    .pipe(plugins.connect.reload()));
+  .pipe(cleanCSS())
+  .pipe(gulp.dest(out.customcss))
+  .pipe(plugins.connect.reload()));
 
 gulp.task('html', () => gulp.src(src.html)
-    .pipe(gulp.dest(build))
-    .pipe(plugins.connect.reload()));
+  .pipe(gulp.dest(build))
+  .pipe(plugins.connect.reload()));
 
 gulp.task('imagemin', () => gulp.src(src.images)
-    .pipe(plugins.imagemin())
-    .pipe(gulp.dest(out.images)));
+  .pipe(plugins.imagemin())
+  .pipe(gulp.dest(out.images)));
 
 /* The jshint task runs jshint with ES6 support. */
 gulp.task('eslint', () => gulp.src(src.scripts.all)
-    .pipe(eslint())
-    .pipe(eslint.format()));
+  .pipe(eslint())
+  .pipe(eslint.format()));
 
 gulp.task('webpack', () => gulp.src(src.test.file)
-    .pipe(webpack(webpackConfig))
-    .pipe(gulp.dest(out.test.folder))
-    .pipe(plugins.connect.reload()));
+  .pipe(webpack(webpackConfig))
+  .pipe(gulp.dest(out.test.folder))
+  .pipe(plugins.connect.reload()));
 
 gulp.task('testSource', () => gulp.src('./src/js/inverted-index.js')
-    .pipe(gulp.dest('./jasmine/src/'))
-    .pipe(plugins.connect.reload()));
+  .pipe(gulp.dest('./jasmine/src/'))
+  .pipe(plugins.connect.reload()));
 
 gulp.task('reloadTest', () => gulp.src(`${spec}spec/build.js`)
-    .pipe(gulp.dest(`${out.test.folder}build.js`))
-    .pipe(plugins.connect.reload()));
+  .pipe(gulp.dest(`${out.test.folder}build.js`))
+  .pipe(plugins.connect.reload()));
 
 gulp.task('serve', ['build', 'watch'], () => {
   plugins.connect.server({
