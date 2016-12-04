@@ -27,3 +27,6 @@ build/Release
 node_modules 
 .vscode/
 .env
+codeclimate-config.patch
+.eslintrcFile
+.csslintrc

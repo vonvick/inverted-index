@@ -1,6 +1,3 @@
-/* eslint class-methods-use-this: "error"*/
-/* eslint-env es6*/
-
 /**
  *  InvertedIndex class constructor
  *  @class
@@ -129,7 +126,7 @@ class InvertedIndex {
    * @returns {Object}
    */
   searchAFile(file, terms, name) {
-    const files = {};
+    let files = {};
     files[name] = {};
     for (let j = 0; j < terms.length; j += 1) {
       if (file[terms[j]]) {
