@@ -11,6 +11,10 @@
     "type": "git",
     "url": "git+https://github.com/vonvick/inverted-index.git"
   },
+  "engines": {
+    "node": "6.9.x",
+    "npm": "2.15.x"
+  },
   "keywords": [
     "inverted",
     "Index",
@@ -31,16 +35,10 @@
     "browser-sync": "^2.18.1",
     "browserify": "^9.0.8",
     "coveralls": "^2.11.15",
-    "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-browserify": "^0.5.1",
-    "gulp-clean-css": "^2.0.13",
-    "gulp-connect": "^5.0.0",
-    "gulp-imagemin": "^3.1.1",
     "gulp-jasmine-livereload-task": "^0.10.1",
     "gulp-jshint": "^2.0.2",
-    "gulp-load-plugins": "^1.4.0",
-    "gulp-sass": "^2.3.2",
     "gulp-shell": "^0.5.2",
     "jasmine": "^2.5.2",
     "jasmine-core": "^2.5.2",
@@ -59,11 +57,18 @@
     "karma-requirejs": "^1.1.0",
     "requirejs": "^2.3.2",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "webpack": "^1.13.3",
-    "webpack-stream": "^3.2.0"
+    "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "angular": "^1.5.8"
+    "angular": "^1.5.8",
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^2.0.13",
+    "gulp-connect": "^5.0.0",
+    "gulp-eslint": "^3.0.1",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-sass": "^2.3.2",
+    "gulp-load-plugins": "^1.4.0",
+    "webpack": "^1.13.3",
+    "webpack-stream": "^3.2.0"
   }
 }
