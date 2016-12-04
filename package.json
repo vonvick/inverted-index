@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node node_modules/gulp-cli/bin/gulp",
-    "test": "node_modules/karma/bin/karma start karma.conf.js --single-run",
+    "test": "node_modules/karma/bin/karma start karma.conf.js --single-run"
   },
   "repository": {
     "type": "git",
