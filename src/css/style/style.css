@@ -71,3 +71,18 @@ input[type=search] {
   padding-left: 0;
   width: 100%;
 }
+
+.search-box {
+  margin-top: 50px;
+  margin-bottom: 80px;
+}
+
+.add-file {
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.logo-img {
+  margin-top: auto;
+  margin-bottom: 30px;
+}

@@ -28,9 +28,13 @@
     </header>
     <main>
       <ul id="slide-out" class="side-nav fixed">
-        <li class="brand-logo"><img src="img/logo.jpg" height="150" width="250" class="center"/></li>
+        <li class="brand-logo">
+          <div class="logo-img">
+            <img src="img/logo.png" height="200" width="250" class="center"/>
+          </div>
+        </li>
         <li class="search">
-          <div class="nav-wrapper card">
+          <div class="nav-wrapper card search-box">
             <form ng-submit="searchIndex()">
               <div class="row">
                 <div class="input-field col m8">
@@ -48,9 +52,11 @@
           </div>
         </li>
         <li>
-          <a class="waves-effect waves-light btn" href="#modal1">Add a File</a>
-          <p class="error" ng-model="message">{{error}}</p>
-          <p class="success" ng-model="message">{{success}}</p>
+          <div class="add-file">
+            <a class="waves-effect waves-light btn blue darken-3" href="#modal1">Add a File</a>
+            <p class="error" ng-model="message">{{error}}</p>
+            <p class="success" ng-model="message">{{success}}</p>
+          </div>
         </li>
         <li ng-repeat="file in fileNames">
           {{file}} <button class="waves-light waves-effect small-button btn orange hide-intro" ng-click="createIndex(file)">create index </button>
