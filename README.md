@@ -6,6 +6,8 @@ The Inverted index application allows a user to search for text blocks in the ar
 The user can upload multiple JSON files with the correct format displayed below and create an indexes for them, search for words in
 all files and one file.
 
+The link to the hosted application on heroku can be found [here](https://inverted-index-andela.herokuapp.com)
+
 #### How can I get started with the api?
 1. To use the application locally, clone the repository and run ``` npm install ```. It will download all dependencies.
 2. Run ``` gulp ``` on the command line to start the application.
