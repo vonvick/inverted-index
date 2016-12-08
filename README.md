@@ -40,4 +40,5 @@ The limitations of this api is that the file has to be in a jSON format and also
 6. Karma
 7. Jasmine
 8. Coveralls
-9. JSHint
+9. ESLint
+10. Code Climate
