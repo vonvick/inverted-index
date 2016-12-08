@@ -19,7 +19,7 @@ class InvertedIndex {
    * @param {string} text the text to be converted
    * @returns {Array} the result that will be returned after function call
    */
-  textToArray(text) {
+  convertText(text) {
     const result = text.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/);
     return result;
   }
@@ -28,14 +28,14 @@ class InvertedIndex {
    * check the documents in the uploaded file and returns
    * the content of the file in a tokenized format
    * @param {Array} file the content of the file
-   * @returns {Array} returns a boolean
+   * @returns {Array} returns array
    */
   tokenizeFile(file) {
     const fileContent = [];
     for (let i = 0; i < file.length; i += 1) {
       if (file[i].title && file[i].text) {
         const text = `${file[i].title} ${file[i].text}`;
-        const fileDoc = this.textToArray(text);
+        const fileDoc = this.convertText(text);
         fileContent.push(fileDoc);
       }
     }
@@ -62,8 +62,10 @@ class InvertedIndex {
 
   /**
    * loops through an array and removes duplicate elements
-   * @param {}
-   * @returns {Array}
+   * @param {string} bookName the name of the file to index
+   * @param {Array} items the array to loop through
+   * @param {number} element the index of the word of the Array
+   * @returns {Array} 
    */
   sortDocument(bookName, items, element) {
     element = parseInt(element, 10);
@@ -107,7 +109,7 @@ class InvertedIndex {
    * @function takes an indexed file as argument and return the indexes of the
    * file
    * @param {string} name the name of the file to get the index for
-   * @returns {object}
+   * @returns {Object}
    */
   getIndex(name) {
     name = name || null;
@@ -162,10 +164,10 @@ class InvertedIndex {
    * @function takes an array of arguments and returns an array of numbers that
    * represents the index of the words
    * @param {string} terms
-   * @returns {array}
+   * @returns {Array}
    */
   searchIndex(searchTerms, name) {
-    const terms = this.textToArray(searchTerms);
+    const terms = this.convertText(searchTerms);
     name = name || 'all';
     let result = [];
     if (name === 'all') {
