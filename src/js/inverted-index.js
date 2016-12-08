@@ -1,3 +1,5 @@
+/* eslint class-methods-use-this: "off" */
+
 /**
  *  InvertedIndex class constructor
  *  @class
@@ -65,7 +67,7 @@ class InvertedIndex {
    * @param {string} bookName the name of the file to index
    * @param {Array} items the array to loop through
    * @param {number} element the index of the word of the Array
-   * @returns {Array} 
+   * @returns {Array}
    */
   sortDocument(bookName, items, element) {
     element = parseInt(element, 10);
