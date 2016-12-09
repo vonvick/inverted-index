@@ -21,16 +21,18 @@ angular.module('indexApp', [])
       return false;
     }
 
+    function isJson(file) {
+      if (file && file.name.replace(/\s+/, '').match(/\.json$/i)) {
+        return true;
+      } 
+    }
+
     $scope.uploadFile = () => {
       $scope.error = '';
       $scope.success = '';
       const file = document.forms['upload-form']['json-file'].files[0];
       const fileName = file.name.replace(/\s+/, '');
-      if (file) {
-        if (!fileName.match(/\.json$/i)) {
-          $scope.error = 'Invalid file format';
-          return;
-        }
+      if (isJson(file)) {
         const reader = new FileReader();
         reader.onload = (evt) => {
           try {
@@ -88,11 +90,6 @@ angular.module('indexApp', [])
       if (file === undefined) {
         $scope.success = '';
         $scope.error = 'You are searching an unindexed file';
-      } else if (file === 'all') {
-        $scope.searchResult = index.searchIndex(searchItem, file);
-        $scope.searchTerms = searchItem;
-        $scope.showResult = true;
-        $scope.hideTable = true;
       } else {
         $scope.searchResult = index.searchIndex(searchItem, file);
         $scope.searchTerms = searchItem;
