@@ -9,13 +9,43 @@ all files and one file.
 The link to the hosted application on heroku can be found [here](https://inverted-index-andela.herokuapp.com)
 
 #### How can I get started with the api?
-1. To use the application locally, clone the repository and run ``` npm install ```. It will download all dependencies.
-2. Run ``` gulp ``` on the command line to start the application.
-3. Open the application on ``` http://localhost:8080``` and follow the instructions on the screen to upload the files.
+- To use the application locally, clone the repository, type ``` cd inverted-index ``` in the command prompt and run ``` npm install ```. It will download all dependencies.
+- Run ``` gulp ``` on the command line to start the application.
+- Open the application on ``` http://localhost:8080``` .
+- Create a JSON file with the following format. You can upload multiple files that follows the format below:
+```
+[
+  {
+    "title": "I am proud to be an Andelan",
+    "text": "Andela is looking to make world class technology from Africa"
+  },
 
-#### What are the  external dependencies of the api?
-The external endpoints of the api are listed below:
-``` const InvertedIndex = new InvertedIndex(); ```
+  {
+    "title": "The Noisy Neighbours",
+    "text": "My neighbours have been very noisy lately and this had led to many sleepless nights at home"
+  }
+]
+```
+- Click the create index button to create an index
+- Click the get index button to see the index for a particular file.
+- Enter any text(s) to search for and select the file or all files to search in.
+- Press the enter key to perform the search
+
+#### External Dependencies for the app
+1. Javascript(ECMAScript 2015)
+2. AngularJS
+3. Gulp
+4. Webpack
+5. Node.js
+
+#### How do I run the tests?
+- To view the test on the browser, type ``` http://localhost:8082 ```  on the broswer
+- running ``` npm test ``` on the command line also displays the result on the command line
+
+#### What are the available endpoint?
+The available endpoints of the api are listed below:
+- Instantiate the Class
+	``` const InvertedIndex = new InvertedIndex(); ```
 - Create Index
 	``` const createIndex  = InvertedIndex.createIndex(filename, fileContent); ```
 - Get Index
@@ -23,22 +53,14 @@ The external endpoints of the api are listed below:
 - Search Index
 	``` const searchIndex = InvertedIndex.searchIndex(searchTerms, fileName); ```
 
-#### How do I run the tests?
-- To view the test on the browser, type ``` http://localhost:8082 ```  on the broswer
-- running ``` npm test ``` on the command line also displays the result on the command line
-- What are the available endpoint?
-
 #### What are the limitations of the api?
 The limitations of this api is that the file has to be in a jSON format and also te JSON file has to be an array of Objects. The upload mechanism should allow for text file and also different word documents.
 
-### Tools
-1. Javascript
-2. Angular
-3. Gulp
-4. Webpack
-5. Travis ci
-6. Karma
-7. Jasmine
-8. Coveralls
-9. ESLint
-10. Code Climate
+
+### Contributing
+1. Fork this repository to your account.
+2. Clone your repositry: git clone git@github.com:your-username/inverted-index.git OR git clone https://github.com/your-username/inverted-index.git
+3. Create your feature branch: git checkout -b new-feature
+4. Commit your changes: git commit -m "did something"
+5. Push to the remote branch: git push origin new-feature
+6. Open a pull request.
