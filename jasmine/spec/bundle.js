@@ -64,10 +64,8 @@
 	    invertedIndex.indexes = {};
 	  });
 	
-	  it('should return the instance of the class', function () {
-	    var indexInstance = invertedIndex;
-	    expect(indexInstance).toEqual(jasmine.any(Object));
-	    expect(Object.keys(invertedIndex.indexes).length).toBe(0);
+	  it('should be truthy for the instance of the class', function () {
+	    expect(invertedIndex instanceof InvertedIndex).toBeTruthy();
 	  });
 	
 	  describe('Read book data', function () {
