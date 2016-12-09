@@ -10,7 +10,6 @@
   },
   "globals": {
       "amd": true,
-      "_": true
   },
   "rules": {
     "one-var": 0,
