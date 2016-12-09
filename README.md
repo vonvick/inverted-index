@@ -9,10 +9,10 @@ all files and one file.
 The link to the hosted application on heroku can be found [here](https://inverted-index-andela.herokuapp.com)
 
 #### How can I get started with the api?
-1. To use the application locally, clone the repository and run ``` npm install ```. It will download all dependencies.
-2. Run ``` gulp ``` on the command line to start the application.
-3. Open the application on ``` http://localhost:8080``` and follow the instructions on the screen to upload the files.
-4. Create a JSON file with the following format. You can upload multiple files that follows the format below:
+- To use the application locally, clone the repository, type ``` cd inverted-index ``` in the command prompt and run ``` npm install ```. It will download all dependencies.
+- Run ``` gulp ``` on the command line to start the application.
+- Open the application on ``` http://localhost:8080``` .
+- Create a JSON file with the following format. You can upload multiple files that follows the format below:
 ```
 [
   {
@@ -26,12 +26,12 @@ The link to the hosted application on heroku can be found [here](https://inverte
   }
 ]
 ```
-5. Click the create index button to create an index
-6. Click the get index button to see the index for a particulat file.
-7. Enter any text(s) to search for and select the file or all files to search in.
-8. Press the enter key to perform the search
+- Click the create index button to create an index
+- Click the get index button to see the index for a particular file.
+- Enter any text(s) to search for and select the file or all files to search in.
+- Press the enter key to perform the search
 
-### External Dependencies for the app
+#### External Dependencies for the app
 1. Javascript(ECMAScript 2015)
 2. AngularJS
 3. Gulp
