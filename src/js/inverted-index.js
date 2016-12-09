@@ -21,7 +21,7 @@ class InvertedIndex {
    * @param {string} text the text to be converted
    * @returns {Array} the result that will be returned after function call
    */
-  convertText(text) {
+  textToArray(text) {
     const result = text.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/);
     return result;
   }
@@ -37,7 +37,7 @@ class InvertedIndex {
     for (let i = 0; i < file.length; i += 1) {
       if (file[i].title && file[i].text) {
         const text = `${file[i].title} ${file[i].text}`;
-        const fileDoc = this.convertText(text);
+        const fileDoc = this.textToArray(text);
         fileContent.push(fileDoc);
       }
     }
@@ -50,7 +50,7 @@ class InvertedIndex {
    * @param {Array} file the content of the file
    * @returns {boolean} returns a boolean
    */
-  checkBookData(file) {
+  readFileData(file) {
     if (!Array.isArray(file) || file.length < 1) {
       return false;
     }
@@ -90,7 +90,7 @@ class InvertedIndex {
    * @returns {object}
    */
   createIndex(name, fileContent) {
-    const readFile = this.checkBookData(fileContent);
+    const readFile = this.readFileData(fileContent);
     if (!readFile) {
       return false;
     }
@@ -168,8 +168,13 @@ class InvertedIndex {
    * @param {string} terms
    * @returns {Array}
    */
-  searchIndex(searchTerms, name) {
-    const terms = this.convertText(searchTerms);
+  searchIndex(name, ...searchTerms) {
+    let terms = '';
+    if (Array.isArray(searchTerms)) {
+      terms = searchTerms;
+    } else {
+      terms = this.textToArray(searchTerms);
+    }
     name = name || 'all';
     let result = [];
     if (name === 'all') {
