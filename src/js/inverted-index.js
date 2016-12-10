@@ -178,7 +178,7 @@ class InvertedIndex {
     }
     searchTerm = searchTerm.join(' ');
     const terms = this.textToArray(searchTerm);
-    return terms
+    return terms;
    }
   
   /**
