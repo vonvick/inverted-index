@@ -163,18 +163,32 @@ class InvertedIndex {
   }
 
   /**
+   * @function takes an array and returns a sanitized version of the array
+   * @param {string} terms
+   * @returns {Array}
+   */
+  sortSearchTerms(searchTerms) {
+    let searchTerm = [];
+    for (let i = 0; i < searchTerms.length; i += 1) {
+      if (Array.isArray(searchTerms[i])) {
+        searchTerm = searchTerm.concat(searchTerms[i]);
+      } else {
+        searchTerm.push(searchTerms[i]);
+      }
+    }
+    searchTerm = searchTerm.join(' ');
+    const terms = this.textToArray(searchTerm);
+    return terms;
+   }
+  
+  /**
    * @function takes an array of arguments and returns an array of numbers that
    * represents the index of the words
    * @param {string} terms
    * @returns {Array}
    */
   searchIndex(name, ...searchTerms) {
-    let terms = '';
-    if (Array.isArray(searchTerms)) {
-      terms = searchTerms;
-    } else {
-      terms = this.textToArray(searchTerms);
-    }
+    const terms = this.sortSearchTerms(searchTerms);
     name = name || 'all';
     let result = [];
     if (name === 'all') {
