@@ -179,7 +179,7 @@ class InvertedIndex {
     searchTerm = searchTerm.join(' ');
     const terms = this.textToArray(searchTerm);
     return terms;
-   }
+  }
 
   /**
    * @function takes an array of arguments and returns an array of numbers that
