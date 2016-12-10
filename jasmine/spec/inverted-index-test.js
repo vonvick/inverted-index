@@ -126,6 +126,14 @@ describe('Inverted Index', () => {
       expect(searchIndex[0].books.because).toBe(null);
       expect(searchIndex[1].books1.because).toBe(null);
     });
+    it('should return search results for a number of arguments', () => {
+      invertedIndex.createIndex('books', books);
+      invertedIndex.createIndex('books1', books1);
+      const searchIndex = invertedIndex.searchIndex('all', 'because', ['angela', 'Nigeria', 'and'], 'alice');
+      expect(searchIndex[0].books.because).toBe(null);
+      expect(searchIndex[1].books1.because).toBe(null);
+      expect(searchIndex[0].books.and).toEqual([0, 1]);
+    });
     it('should return an array containing the indexes of the search parameter in the selected file', () => {
       invertedIndex.createIndex('books', books);
       invertedIndex.createIndex('books1', books1);
