@@ -27,6 +27,31 @@ angular.module('indexApp', [])
       } 
     }
 
+    function validate(file, fileName){
+      if (file.find(findWrongFormat)) {
+        $scope.$apply(() => {
+          $scope.error = `The .json file did not follow
+          the required format`;
+        });
+        return;
+      } else if ($scope.fileNames.includes(fileName)) {
+        $scope.$apply(() => {
+          $scope.error = 'The file has been uploaded before';
+        });
+        return;
+      } else if (file.length < 1 || Array.isArray(file === false)) {
+        $scope.$apply(() => {
+          $scope.error = 'This file is empty or not an Array of object';
+        });
+        return;
+      }
+      $scope.$apply(() => {
+        $scope.fileNames.push(fileName);
+        $scope.files[fileName] = file;
+        $scope.success = 'The file has been successfully uploaded';
+      });
+    }
+
     $scope.uploadFile = () => {
       $scope.error = '';
       $scope.success = '';
@@ -34,38 +59,17 @@ angular.module('indexApp', [])
       const fileName = file.name.replace(/\s+/, '');
       if (isJson(file)) {
         const reader = new FileReader();
+        reader.readAsBinaryString(file);
         reader.onload = (evt) => {
           try {
             const jsonData = JSON.parse(evt.target.result);
-            if (jsonData.find(findWrongFormat)) {
-              $scope.$apply(() => {
-                $scope.error = `The .json file did not follow
-                the required format`;
-              });
-              return;
-            } else if ($scope.fileNames.includes(fileName)) {
-              $scope.$apply(() => {
-                $scope.error = 'The file has been uploaded before';
-              });
-              return;
-            } else if (jsonData.length < 1 || Array.isArray(jsonData === false)) {
-              $scope.$apply(() => {
-                $scope.error = 'This file is empty or not an Array of object';
-              });
-              return;
-            }
-            $scope.$apply(() => {
-              $scope.fileNames.push(fileName);
-              $scope.files[fileName] = jsonData;
-              $scope.success = 'The file has been successfully uploaded';
-            });
+            validate(jsonData, fileName);
           } catch (error) {
             $scope.$apply(() => {
               $scope.error = 'Invalid .json file';
             });
           }
         };
-        reader.readAsBinaryString(file);
       }
     };
 
