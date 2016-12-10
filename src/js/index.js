@@ -91,7 +91,7 @@ angular.module('indexApp', [])
         $scope.success = '';
         $scope.error = 'You are searching an unindexed file';
       } else {
-        $scope.searchResult = index.searchIndex(searchItem, file);
+        $scope.searchResult = index.searchIndex(file, searchItem);
         $scope.searchTerms = searchItem;
         $scope.showResult = true;
         $scope.hideTable = true;
