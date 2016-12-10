@@ -24,10 +24,10 @@ angular.module('indexApp', [])
     function isJson(file) {
       if (file && file.name.replace(/\s+/, '').match(/\.json$/i)) {
         return true;
-      } 
+      }
     }
 
-    function validate(file, fileName){
+    function validate(file, fileName) {
       if (file.find(findWrongFormat)) {
         $scope.$apply(() => {
           $scope.error = `The .json file did not follow

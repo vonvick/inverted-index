@@ -180,7 +180,7 @@ class InvertedIndex {
     const terms = this.textToArray(searchTerm);
     return terms;
    }
-  
+
   /**
    * @function takes an array of arguments and returns an array of numbers that
    * represents the index of the words
