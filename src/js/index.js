@@ -1,11 +1,13 @@
+/* eslint amd:true */
 /* global InvertedIndex */
 // import the angular package and other components
 
+const Utility = require('./utility');
 const angular = require('angular');
 
 angular.module('indexApp', [])
   .controller('InvertedIndexController', ['$scope', ($scope) => {
-    const index = new InvertedIndex();
+    const index = new InvertedIndex(Utility);
 
     $scope.files = {};
     $scope.fileNames = [];

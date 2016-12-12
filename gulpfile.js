@@ -66,6 +66,10 @@ gulp.task('source', () => gulp.src('./src/js/inverted-index.js')
   .pipe(gulp.dest('./build/js'))
   .pipe(plugins.connect.reload()));
 
+gulp.task('utility', () => gulp.src('./src/js/utility.js')
+  .pipe(gulp.dest('./build/js'))
+  .pipe(plugins.connect.reload()));
+
 gulp.task('sass', () => gulp.src(src.sass)
   .pipe(plugins.sass())
   .pipe(gulp.dest(out.css)));
@@ -128,7 +132,8 @@ gulp.task('watch', () => {
   gulp.watch('./jasmine/spec/inverted-index-test.js', ['reloadTest']);
   gulp.watch('./src/js/inverted-index.js', ['testSource']);
   gulp.watch('./src/js/inverted-index.js', ['source']);
+  gulp.watch('./src/js/utility.js', ['utility']);
 });
 
-gulp.task('build', ['script', 'source', 'sass', 'css', 'html', 'imagemin', 'reloadTest', 'testSource']);
+gulp.task('build', ['script', 'source', 'utility', 'sass', 'css', 'html', 'imagemin', 'reloadTest', 'testSource']);
 gulp.task('default', ['serve', 'webpack', 'serveTest']);

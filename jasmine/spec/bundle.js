@@ -47,16 +47,17 @@
 	'use strict';
 	
 	/* global InvertedIndex */
-	var jsonFile = __webpack_require__(1);
-	var jsonFile1 = __webpack_require__(2);
-	var emptyJson = __webpack_require__(3);
-	var badJson = __webpack_require__(4);
-	var deepFile = __webpack_require__(5);
+	var Utility = __webpack_require__(1);
+	var jsonFile = __webpack_require__(2);
+	var jsonFile1 = __webpack_require__(3);
+	var emptyJson = __webpack_require__(4);
+	var badJson = __webpack_require__(5);
+	var deepFile = __webpack_require__(6);
 	
 	describe('Inverted Index', function () {
-	  var invertedIndex = new InvertedIndex();
-	  var books = jsonFile;
-	  var books1 = jsonFile1;
+	  var invertedIndex = new InvertedIndex(Utility);
+	  var file1 = jsonFile;
+	  var file2 = jsonFile1;
 	  var empty = emptyJson;
 	  var badFile = badJson;
 	
@@ -77,70 +78,70 @@
 	  describe('Read book data', function () {
 	    it('should read the content of a json file and return false if the file is empty', function () {
 	      var book = [];
-	      var isValid = invertedIndex.readFileData(book);
+	      var isValid = invertedIndex.utility.readFileData(book);
 	      expect(isValid).toBe(false);
 	    });
 	    it('should read the content of a json file and return true if the file matches the format', function () {
-	      var isValid = invertedIndex.readFileData(books);
+	      var isValid = invertedIndex.utility.readFileData(file1);
 	      expect(isValid).toBe(true);
 	    });
 	    it('should return false if the content of the file is not an array of object', function () {
-	      var isValid = invertedIndex.readFileData(badFile);
+	      var isValid = invertedIndex.utility.readFileData(badFile);
 	      expect(isValid).toBe(false);
 	    });
 	    it('should return false if the content of the file is a multi-dimensional array', function () {
-	      var wrongFormat = invertedIndex.readFileData(deepFile);
-	      expect(wrongFormat).toBe(false);
+	      var wrongFile = invertedIndex.utility.readFileData(deepFile);
+	      expect(wrongFile).toBe(false);
 	    });
 	  });
 	
 	  describe('Populate index', function () {
 	    beforeEach(function () {
-	      invertedIndex.createIndex('books', books);
+	      invertedIndex.createIndex('file1', file1);
 	    });
 	
 	    it('should create the index once the file has been read', function () {
-	      expect(invertedIndex.indexes.books).toBeDefined();
+	      expect(invertedIndex.indexes.file1).toBeDefined();
 	    });
 	    it('should return an object of all created index', function () {
-	      var bookIndex = invertedIndex.indexes.books;
+	      var bookIndex = invertedIndex.indexes.file1;
 	      var bookKeys = Object.keys(bookIndex);
 	      bookKeys.forEach(function (key) {
 	        expect({}.hasOwnProperty.call(bookIndex, key)).toBeTruthy();
 	      });
 	    });
 	    it('should return an array that contains the indexes of a word', function () {
-	      expect(invertedIndex.indexes.books.and).toEqual([0, 1]);
-	      expect(invertedIndex.indexes.books.of).toEqual([0, 1]);
+	      expect(invertedIndex.indexes.file1.and).toEqual([0, 1]);
+	      expect(invertedIndex.indexes.file1.of).toEqual([0, 1]);
 	    });
 	    it('should return false if the file Content is Empty', function () {
 	      var emptyIndex = invertedIndex.createIndex('empty', empty);
 	      expect(emptyIndex).toBe(false);
 	    });
 	    it('should not create the index again if the file has been uploaded before', function () {
-	      invertedIndex.createIndex('books', books);
+	      invertedIndex.createIndex('file1', file1);
 	      expect(Object.keys(invertedIndex.indexes).length).toBe(1);
 	    });
 	  });
 	
 	  describe('Get Index', function () {
 	    it('should get the indexes of a particular uploaded file', function () {
-	      invertedIndex.createIndex('books', books);
-	      var getIndex = invertedIndex.getIndex('books');
+	      invertedIndex.createIndex('file1', file1);
+	      var getIndex = invertedIndex.getIndex('file1');
 	      expect(getIndex).toBeDefined();
 	    });
 	    it('should return an empty object for an uploaded file that has not been indexed', function () {
-	      var getIndex = invertedIndex.getIndex('books');
+	      var getIndex = invertedIndex.getIndex('file1');
 	      expect(getIndex).toEqual({});
 	    });
 	    it('should the length of all indexed file', function () {
-	      invertedIndex.createIndex('books', books);
-	      invertedIndex.createIndex('books1', books1);
+	      invertedIndex.createIndex('file1', file1);
+	      invertedIndex.createIndex('file2', file2);
 	      var getIndex = invertedIndex.getIndex();
 	      expect(Object.keys(getIndex).length).toBe(2);
 	    });
 	    it('should return undefined if no index has been created for a file', function () {
-	      invertedIndex.createIndex('books', books);
+	      invertedIndex.createIndex('file1', file1);
 	      var getIndex = invertedIndex.getIndex('book3');
 	      expect(getIndex).toBeUndefined();
 	    });
@@ -148,19 +149,19 @@
 	
 	  describe('Search Index', function () {
 	    it('should return an array containing the index of a word', function () {
-	      invertedIndex.createIndex('books', books);
-	      var searchIndex = invertedIndex.searchIndex('books', 'and');
-	      expect(searchIndex[0].books.and).toEqual([0, 1]);
+	      invertedIndex.createIndex('file1', file1);
+	      var searchIndex = invertedIndex.searchIndex('file1', 'and');
+	      expect(searchIndex[0].file1.and).toEqual([0, 1]);
 	    });
 	    it('should return null for a word not found in the file', function () {
-	      invertedIndex.createIndex('books', books);
-	      var searchIndex = invertedIndex.searchIndex('books', 'because');
-	      expect(searchIndex[0].books.because).toBe(null);
+	      invertedIndex.createIndex('file1', file1);
+	      var searchIndex = invertedIndex.searchIndex('file1', 'because');
+	      expect(searchIndex[0].file1.because).toBe(null);
 	    });
 	    it('should return an array of Objects with keys of all the files searched', function () {
-	      invertedIndex.createIndex('books', books);
-	      invertedIndex.createIndex('books1', books1);
-	      var fileList = ['books', 'books1'];
+	      invertedIndex.createIndex('file1', file1);
+	      invertedIndex.createIndex('file2', file2);
+	      var fileList = ['file1', 'file2'];
 	      var searchIndex = invertedIndex.searchIndex('all', 'and');
 	      searchIndex.forEach(function (file) {
 	        expect(fileList).toContain(Object.keys(file)[0]);
@@ -168,28 +169,28 @@
 	      expect(Array.isArray(searchIndex)).toBeTruthy();
 	    });
 	    it('should return null if a word is not found in a file', function () {
-	      invertedIndex.createIndex('books', books);
-	      invertedIndex.createIndex('books1', books1);
+	      invertedIndex.createIndex('file1', file1);
+	      invertedIndex.createIndex('file2', file2);
 	      var searchIndex = invertedIndex.searchIndex('all', 'because');
-	      expect(searchIndex[0].books.because).toBe(null);
-	      expect(searchIndex[1].books1.because).toBe(null);
+	      expect(searchIndex[0].file1.because).toBe(null);
+	      expect(searchIndex[1].file2.because).toBe(null);
 	    });
 	    it('should return search results for a number of arguments', function () {
-	      invertedIndex.createIndex('books', books);
-	      invertedIndex.createIndex('books1', books1);
+	      invertedIndex.createIndex('file1', file1);
+	      invertedIndex.createIndex('file2', file2);
 	      var searchIndex = invertedIndex.searchIndex('all', 'because', ['angela', 'Nigeria', 'and'], 'alice');
-	      expect(searchIndex[0].books.because).toBe(null);
-	      expect(searchIndex[1].books1.because).toBe(null);
-	      expect(searchIndex[0].books.and).toEqual([0, 1]);
+	      expect(searchIndex[0].file1.because).toBe(null);
+	      expect(searchIndex[1].file2.because).toBe(null);
+	      expect(searchIndex[0].file1.and).toEqual([0, 1]);
 	    });
 	    it('should return an array containing the indexes of the search parameter in the selected file', function () {
-	      invertedIndex.createIndex('books', books);
-	      invertedIndex.createIndex('books1', books1);
-	      var searchIndex = invertedIndex.searchIndex('books', 'and');
-	      var searchIndex2 = invertedIndex.searchIndex('books1', 'and');
-	      expect(searchIndex[0].books.and).toEqual([0, 1]);
+	      invertedIndex.createIndex('file1', file1);
+	      invertedIndex.createIndex('file2', file2);
+	      var searchIndex = invertedIndex.searchIndex('file1', 'and');
+	      var searchIndex2 = invertedIndex.searchIndex('file2', 'and');
+	      expect(searchIndex[0].file1.and).toEqual([0, 1]);
 	      expect(Object.keys(searchIndex[0]).length).toBe(1);
-	      expect(searchIndex2[0].books1.and).toEqual([0, 1]);
+	      expect(searchIndex2[0].file2.and).toEqual([0, 1]);
 	      expect(Object.keys(searchIndex2[0]).length).toBe(1);
 	    });
 	  });
@@ -197,6 +198,158 @@
 
 /***/ },
 /* 1 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	/* eslint class-methods-use-this: "off" */
+	
+	/**
+	 *  Utility class constructor
+	 *  @class
+	 */
+	
+	var Utility = function () {
+	  function Utility() {
+	    _classCallCheck(this, Utility);
+	  }
+	
+	  _createClass(Utility, null, [{
+	    key: 'textToArray',
+	
+	
+	    /**
+	     * converts the string provided to lower case, strips the string of all
+	     * special characters, extra spaces and converts the result into an Array
+	     * @param {string} text the text to be converted
+	     * @returns {Array} the result that will be returned after function call
+	     */
+	    value: function textToArray(text) {
+	      var result = text.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/);
+	      return result;
+	    }
+	
+	    /**
+	     * checks the content of the uploaded json file and returns
+	     * true if the file follows the allowed format
+	     * @param {Array} file the content of the file
+	     * @returns {boolean} returns a boolean
+	     */
+	
+	  }, {
+	    key: 'readFileData',
+	    value: function readFileData(file) {
+	      if (!Array.isArray(file) || file.length < 1) {
+	        return false;
+	      }
+	      for (var i = 0; i < file.length; i += 1) {
+	        if (!file[i].title || !file[i].text) {
+	          return false;
+	        }
+	      }
+	      return true;
+	    }
+	
+	    /**
+	     * check the documents in the uploaded file and returns
+	     * the content of the file in a tokenized format
+	     * @param {Array} file the content of the file
+	     * @returns {Array} returns array
+	     */
+	
+	  }, {
+	    key: 'tokenizeFile',
+	    value: function tokenizeFile(file) {
+	      var fileContent = [];
+	      for (var i = 0; i < file.length; i += 1) {
+	        if (file[i].title && file[i].text) {
+	          var text = file[i].title + ' ' + file[i].text;
+	          var fileDoc = this.textToArray(text);
+	          fileContent.push(fileDoc);
+	        }
+	      }
+	      return fileContent;
+	    }
+	
+	    /**
+	     * @function searches for the given word(s) in a given file
+	     * @param {Object} file an Object with token as keys and array of index as values
+	     * @param {Array} terms an Array of word(s) to be searched for
+	     * @returns {Object}
+	     */
+	
+	  }, {
+	    key: 'searchAFile',
+	    value: function searchAFile(file, terms, name) {
+	      var files = {};
+	      files[name] = {};
+	      for (var j = 0; j < terms.length; j += 1) {
+	        if (file[terms[j]]) {
+	          files[name][terms[j]] = file[terms[j]];
+	        } else {
+	          files[name][terms[j]] = null;
+	        }
+	      }
+	      return files;
+	    }
+	
+	    /**
+	     * @function return an object that contains the index of the search
+	     * word and the files they can be found.
+	     * @param {Object} searchFile the objects of Object
+	     * @param {Array} terms an Array of word(s) to be searched for
+	     * @returns {Array}
+	     */
+	
+	  }, {
+	    key: 'searchAllFiles',
+	    value: function searchAllFiles(searchFiles, terms) {
+	      var result = [];
+	      var file = {};
+	      var fileResult = {};
+	      var fileNames = Object.keys(searchFiles);
+	      for (var i = 0; i < fileNames.length; i += 1) {
+	        file = searchFiles[fileNames[i]];
+	        fileResult = this.searchAFile(file, terms, fileNames[i]);
+	        result.push(fileResult);
+	      }
+	      return result;
+	    }
+	
+	    /**
+	     * @function takes an array and returns a sanitized version of the array
+	     * @param {string} terms
+	     * @returns {Array}
+	     */
+	
+	  }, {
+	    key: 'sortSearchTerms',
+	    value: function sortSearchTerms(searchTerms) {
+	      var searchTerm = [];
+	      for (var i = 0; i < searchTerms.length; i += 1) {
+	        if (Array.isArray(searchTerms[i])) {
+	          searchTerm = searchTerm.concat(searchTerms[i]);
+	        } else {
+	          searchTerm.push(searchTerms[i]);
+	        }
+	      }
+	      searchTerm = searchTerm.join(' ');
+	      var terms = this.textToArray(searchTerm);
+	      return terms;
+	    }
+	  }]);
+	
+	  return Utility;
+	}();
+	
+	module.exports = Utility;
+
+/***/ },
+/* 2 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -211,7 +364,7 @@
 	];
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -226,13 +379,13 @@
 	];
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports) {
 
 	module.exports = [];
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -247,7 +400,7 @@
 	};
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	module.exports = [

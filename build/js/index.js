@@ -46,15 +46,14 @@
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 	/* global InvertedIndex */
 	// import the angular package and other components
 
-	var angular = __webpack_require__(1);
+	var Utility = __webpack_require__(1);
+	var angular = __webpack_require__(2);
 
 	angular.module('indexApp', []).controller('InvertedIndexController', ['$scope', function ($scope) {
-	  var index = new InvertedIndex();
+	  var index = new InvertedIndex(Utility);
 
 	  $scope.files = {};
 	  $scope.fileNames = [];
@@ -70,58 +69,54 @@
 	    return false;
 	  }
 
+	  function isJson(file) {
+	    if (file && file.name.replace(/\s+/, '').match(/\.json$/i)) {
+	      return true;
+	    }
+	  }
+
+	  function validate(file, fileName) {
+	    if (file.find(findWrongFormat)) {
+	      $scope.$apply(function () {
+	        $scope.error = 'The .json file did not follow\n          the required format';
+	      });
+	      return;
+	    } else if ($scope.fileNames.includes(fileName)) {
+	      $scope.$apply(function () {
+	        $scope.error = 'The file has been uploaded before';
+	      });
+	      return;
+	    } else if (file.length < 1 || Array.isArray(file === false)) {
+	      $scope.$apply(function () {
+	        $scope.error = 'This file is empty or not an Array of object';
+	      });
+	      return;
+	    }
+	    $scope.$apply(function () {
+	      $scope.fileNames.push(fileName);
+	      $scope.files[fileName] = file;
+	      $scope.success = 'The file has been successfully uploaded';
+	    });
+	  }
+
 	  $scope.uploadFile = function () {
 	    $scope.error = '';
 	    $scope.success = '';
 	    var file = document.forms['upload-form']['json-file'].files[0];
 	    var fileName = file.name.replace(/\s+/, '');
-	    if (file) {
-	      if (!fileName.match(/\.json$/i)) {
-	        $scope.error = 'Invalid file format';
-	        return;
-	      }
+	    if (isJson(file)) {
 	      var reader = new FileReader();
+	      reader.readAsBinaryString(file);
 	      reader.onload = function (evt) {
 	        try {
-	          var _ret = function () {
-	            var jsonData = JSON.parse(evt.target.result);
-	            if (jsonData.find(findWrongFormat)) {
-	              $scope.$apply(function () {
-	                $scope.error = 'The .json file did not follow\n                the required format';
-	              });
-	              return {
-	                v: void 0
-	              };
-	            } else if ($scope.fileNames.includes(fileName)) {
-	              $scope.$apply(function () {
-	                $scope.error = 'The file has been uploaded before';
-	              });
-	              return {
-	                v: void 0
-	              };
-	            } else if (jsonData.length < 1 || Array.isArray(jsonData === false)) {
-	              $scope.$apply(function () {
-	                $scope.error = 'This file is empty or not an Array of object';
-	              });
-	              return {
-	                v: void 0
-	              };
-	            }
-	            $scope.$apply(function () {
-	              $scope.fileNames.push(fileName);
-	              $scope.files[fileName] = jsonData;
-	              $scope.success = 'The file has been successfully uploaded';
-	            });
-	          }();
-
-	          if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+	          var jsonData = JSON.parse(evt.target.result);
+	          validate(jsonData, fileName);
 	        } catch (error) {
 	          $scope.$apply(function () {
 	            $scope.error = 'Invalid .json file';
 	          });
 	        }
 	      };
-	      reader.readAsBinaryString(file);
 	    }
 	  };
 
@@ -146,13 +141,8 @@
 	    if (file === undefined) {
 	      $scope.success = '';
 	      $scope.error = 'You are searching an unindexed file';
-	    } else if (file === 'all') {
-	      $scope.searchResult = index.searchIndex(searchItem, file);
-	      $scope.searchTerms = searchItem;
-	      $scope.showResult = true;
-	      $scope.hideTable = true;
 	    } else {
-	      $scope.searchResult = index.searchIndex(searchItem, file);
+	      $scope.searchResult = index.searchIndex(file, searchItem);
 	      $scope.searchTerms = searchItem;
 	      $scope.showResult = true;
 	      $scope.hideTable = true;
@@ -162,14 +152,166 @@
 
 /***/ },
 /* 1 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/* eslint class-methods-use-this: "off" */
+
+	/**
+	 *  Utility class constructor
+	 *  @class
+	 */
+
+	var Utility = function () {
+	  function Utility() {
+	    _classCallCheck(this, Utility);
+	  }
+
+	  _createClass(Utility, null, [{
+	    key: 'textToArray',
+
+
+	    /**
+	     * converts the string provided to lower case, strips the string of all
+	     * special characters, extra spaces and converts the result into an Array
+	     * @param {string} text the text to be converted
+	     * @returns {Array} the result that will be returned after function call
+	     */
+	    value: function textToArray(text) {
+	      var result = text.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/);
+	      return result;
+	    }
+
+	    /**
+	     * checks the content of the uploaded json file and returns
+	     * true if the file follows the allowed format
+	     * @param {Array} file the content of the file
+	     * @returns {boolean} returns a boolean
+	     */
+
+	  }, {
+	    key: 'readFileData',
+	    value: function readFileData(file) {
+	      if (!Array.isArray(file) || file.length < 1) {
+	        return false;
+	      }
+	      for (var i = 0; i < file.length; i += 1) {
+	        if (!file[i].title || !file[i].text) {
+	          return false;
+	        }
+	      }
+	      return true;
+	    }
+
+	    /**
+	     * check the documents in the uploaded file and returns
+	     * the content of the file in a tokenized format
+	     * @param {Array} file the content of the file
+	     * @returns {Array} returns array
+	     */
+
+	  }, {
+	    key: 'tokenizeFile',
+	    value: function tokenizeFile(file) {
+	      var fileContent = [];
+	      for (var i = 0; i < file.length; i += 1) {
+	        if (file[i].title && file[i].text) {
+	          var text = file[i].title + ' ' + file[i].text;
+	          var fileDoc = this.textToArray(text);
+	          fileContent.push(fileDoc);
+	        }
+	      }
+	      return fileContent;
+	    }
+
+	    /**
+	     * @function searches for the given word(s) in a given file
+	     * @param {Object} file an Object with token as keys and array of index as values
+	     * @param {Array} terms an Array of word(s) to be searched for
+	     * @returns {Object}
+	     */
+
+	  }, {
+	    key: 'searchAFile',
+	    value: function searchAFile(file, terms, name) {
+	      var files = {};
+	      files[name] = {};
+	      for (var j = 0; j < terms.length; j += 1) {
+	        if (file[terms[j]]) {
+	          files[name][terms[j]] = file[terms[j]];
+	        } else {
+	          files[name][terms[j]] = null;
+	        }
+	      }
+	      return files;
+	    }
+
+	    /**
+	     * @function return an object that contains the index of the search
+	     * word and the files they can be found.
+	     * @param {Object} searchFile the objects of Object
+	     * @param {Array} terms an Array of word(s) to be searched for
+	     * @returns {Array}
+	     */
+
+	  }, {
+	    key: 'searchAllFiles',
+	    value: function searchAllFiles(searchFiles, terms) {
+	      var result = [];
+	      var file = {};
+	      var fileResult = {};
+	      var fileNames = Object.keys(searchFiles);
+	      for (var i = 0; i < fileNames.length; i += 1) {
+	        file = searchFiles[fileNames[i]];
+	        fileResult = this.searchAFile(file, terms, fileNames[i]);
+	        result.push(fileResult);
+	      }
+	      return result;
+	    }
+
+	    /**
+	     * @function takes an array and returns a sanitized version of the array
+	     * @param {string} terms
+	     * @returns {Array}
+	     */
+
+	  }, {
+	    key: 'sortSearchTerms',
+	    value: function sortSearchTerms(searchTerms) {
+	      var searchTerm = [];
+	      for (var i = 0; i < searchTerms.length; i += 1) {
+	        if (Array.isArray(searchTerms[i])) {
+	          searchTerm = searchTerm.concat(searchTerms[i]);
+	        } else {
+	          searchTerm.push(searchTerms[i]);
+	        }
+	      }
+	      searchTerm = searchTerm.join(' ');
+	      var terms = this.textToArray(searchTerm);
+	      return terms;
+	    }
+	  }]);
+
+	  return Utility;
+	}();
+
+	module.exports = Utility;
+
+/***/ },
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(2);
+	__webpack_require__(3);
 	module.exports = angular;
 
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports) {
 
 	/**
