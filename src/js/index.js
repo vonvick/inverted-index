@@ -1,3 +1,4 @@
+/* eslint amd:true */
 /* global InvertedIndex */
 // import the angular package and other components
 

@@ -1,4 +1,5 @@
 /* global InvertedIndex */
+/* eslint amd:true */
 const Utility = require('../../src/js/utility');
 const jsonFile = require('../books');
 const jsonFile1 = require('../books1');
